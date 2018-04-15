@@ -57,7 +57,7 @@ public partial class Admin_Inventory_Add : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@sname", txtStockName.Text);
             cmd.Parameters.AddWithValue("@sdesc", txtStockDesc.Text);
             cmd.Parameters.AddWithValue("@qty", txtQty.Text);
-            cmd.Parameters.AddWithValue("@status", "Status");
+            cmd.Parameters.AddWithValue("@status", "Active");
             cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
             cmd.ExecuteNonQuery();
 

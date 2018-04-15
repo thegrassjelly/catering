@@ -95,7 +95,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:;"><i class="fa fa-stopwatch fa-lg"></i><span>Booking</span></a>
+                    <a href="javascript:;"><i class="fa fa-calendar fa-lg"></i><span>Booking</span></a>
                     <ul class="acc-menu">
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Booking/Add.aspx") %>"><i class="fa fa-plus"></i>Add Booking</a></li>
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Booking/View.aspx") %>"><i class="fa fa-list"></i>View Bookings</a></li>
