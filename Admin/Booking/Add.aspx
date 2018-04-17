@@ -310,7 +310,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-4">Event Date & Time</label>
                                         <div class="col-lg-8">
-                                            <asp:TextBox ID="txtEventDate" class="form-control" 
+                                            <asp:TextBox ID="txtEventDT" class="form-control" 
                                                          TextMode="DateTimeLocal" runat="server" />
                                         </div>
                                     </div>
@@ -318,13 +318,6 @@
                                         <label class="control-label col-lg-4">Ingress Time</label>
                                         <div class="col-lg-7">
                                             <asp:TextBox ID="txtIngressTime" class="form-control" 
-                                                         TextMode="Time" runat="server" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Event Time</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtEventTime" class="form-control" 
                                                          TextMode="Time" runat="server" />
                                         </div>
                                     </div>
@@ -482,6 +475,11 @@
                                             <div id="pnlStockError" runat="server" visible="false">
                                                 <div class="alert alert-danger">
                                                     <b>Select a stock to add</b>
+                                                </div>
+                                            </div>
+                                            <div id="pnlStockExist" runat="server" visible="false">
+                                                <div class="alert alert-danger">
+                                                    <b>Stock already added</b>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">

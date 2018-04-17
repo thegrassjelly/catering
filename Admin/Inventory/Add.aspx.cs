@@ -62,7 +62,7 @@ public partial class Admin_Inventory_Add : System.Web.UI.Page
             cmd.ExecuteNonQuery();
 
             Helper.Log("Add Stock",
-                "Added new stock " + txtStockName.Text, txtStockDesc.Text, Session["userid"].ToString());
+                "Added new stock: " + txtStockName.Text, txtStockDesc.Text, Session["userid"].ToString());
 
             Response.Redirect("View.aspx");
         }

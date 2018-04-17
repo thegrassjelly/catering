@@ -59,7 +59,7 @@ public partial class Admin_Users_Add : System.Web.UI.Page
             cmd.ExecuteNonQuery();
 
             Helper.Log("Add User",
-                "Added user " + txtLN.Text + ", " + txtFN.Text, "", Session["userid"].ToString());
+                "Added user: " + txtLN.Text + ", " + txtFN.Text, "", Session["userid"].ToString());
 
             Response.Redirect("View.aspx");
         }

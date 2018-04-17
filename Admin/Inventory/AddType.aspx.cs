@@ -24,7 +24,7 @@ public partial class Admin_Inventory_AddType : System.Web.UI.Page
             cmd.ExecuteNonQuery();
 
             Helper.Log("Add Stock Type",
-                "Added new stock type " + txtStockType.Text, "", Session["userid"].ToString());
+                "Added new stock type: " + txtStockType.Text, "", Session["userid"].ToString());
 
             Response.Redirect("ViewType.aspx");
         }
