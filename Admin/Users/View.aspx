@@ -26,8 +26,8 @@
                                         <asp:DropDownList ID="ddlType" runat="server" class="form-control"
                                             AutoPostBack="True" OnSelectedIndexChanged="ddlType_OnSelectedIndexChanged">
                                             <asp:ListItem Text="All Users" />
-                                            <asp:ListItem Text="Admin" Value="Admin" />
-                                            <asp:ListItem Text="Assistant" Value="Assistant" />
+                                            <asp:ListItem Text="Admin A" Value="Admin A" />
+                                            <asp:ListItem Text="Admin B" Value="Admin B" />
                                         </asp:DropDownList>
                                     </div>
                                 </div>

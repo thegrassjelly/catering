@@ -43,7 +43,64 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         }
     }
 
+    private void GetClientHist()
+    {
+        if (ddlClientHist.SelectedValue == "New Client")
+        {
+            pnlNewClient.Visible = true;
+            pnlOldClient.Visible = false;
+        }
+        else
+        {
+            pnlNewClient.Visible = false;
+            pnlOldClient.Visible = true;
+        }
+    }
+
+    private void GetMenu()
+    {
+        using (var con = new SqlConnection(Helper.GetCon()))
+        using (var cmd = new SqlCommand())
+        {
+            con.Open();
+            cmd.Connection = con;
+            cmd.CommandText = @"SELECT MenuID, MenuName, Guest, DateAdded
+                                FROM Menu
+                                WHERE BookingDetailsID = '-1' AND UserID = @id";
+            cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            con.Close();
+            da.Fill(ds, "Menu");
+            lvMenu.DataSource = ds;
+            lvMenu.DataBind();
+        }
+    }
+
+    private void GetBookingLinens()
+    {
+        using (var con = new SqlConnection(Helper.GetCon()))
+        using (var cmd = new SqlCommand())
+        {
+            con.Open();
+            cmd.Connection = con;
+            cmd.CommandText = @"SELECT StockTypeName, BookingLinenID, StockName, BookingLinen.Qty, StockDescription,
+                                BookingLinen.DateAdded
+                                FROM BookingLinen
+                                INNER JOIN Stocks ON BookingLinen.StockID = Stocks.StockID
+                                INNER JOIN StockType ON Stocks.StockTypeID = StockType.StockTypeID
+                                WHERE BookingDetailsID = '-1' AND UserID = @id";
+            cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            con.Close();
+            da.Fill(ds, "BookingLinen");
+            lvLinen.DataSource = ds;
+            lvLinen.DataBind();
+        }
+    }
     [WebMethod]
+
     public static List<string> GetName(string prefixText)
     {
         List<string> name = new List<string>();
@@ -146,20 +203,6 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
     {
         GetClientHist();
         pnlAddedClient.Visible = false;
-    }
-
-    private void GetClientHist()
-    {
-        if (ddlClientHist.SelectedValue == "New Client")
-        {
-            pnlNewClient.Visible = true;
-            pnlOldClient.Visible = false;
-        }
-        else
-        {
-            pnlNewClient.Visible = false;
-            pnlOldClient.Visible = true;
-        }
     }
 
     protected void btnAdd_OnClick(object sender, EventArgs e)
@@ -268,49 +311,6 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         GetMenu();
     }
 
-    private void GetMenu()
-    {
-        using (var con = new SqlConnection(Helper.GetCon()))
-        using (var cmd = new SqlCommand())
-        {
-            con.Open();
-            cmd.Connection = con;
-            cmd.CommandText = @"SELECT MenuID, MenuName, Guest, DateAdded
-                                FROM Menu
-                                WHERE BookingDetailsID = '-1' AND UserID = @id";
-            cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            con.Close();
-            da.Fill(ds, "Menu");
-            lvMenu.DataSource = ds;
-            lvMenu.DataBind();
-        }
-    }
-
-    private void GetBookingLinens()
-    {
-        using (var con = new SqlConnection(Helper.GetCon()))
-        using (var cmd = new SqlCommand())
-        {
-            con.Open();
-            cmd.Connection = con;
-            cmd.CommandText = @"SELECT StockTypeName, BookingLinenID, StockName, BookingLinen.Qty, StockDescription,
-                                BookingLinen.DateAdded
-                                FROM BookingLinen
-                                INNER JOIN Stocks ON BookingLinen.StockID = Stocks.StockID
-                                INNER JOIN StockType ON Stocks.StockTypeID = StockType.StockTypeID
-                                WHERE BookingDetailsID = '-1' AND UserID = @id";
-            cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            con.Close();
-            da.Fill(ds, "BookingLinen");
-            lvLinen.DataSource = ds;
-            lvLinen.DataBind();
-        }
-    }
-
     protected void lvLinen_OnPagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
     {
         dpLinen.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
@@ -371,6 +371,32 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
 
     protected void btnSubmit_OnClick(object sender, EventArgs e)
     {
-        throw new NotImplementedException();
+
+        //    using (var con = new SqlConnection(Helper.GetCon()))
+        //    using (var cmd = new SqlCommand())
+        //    {
+        //        con.Open();
+        //        cmd.Connection = con;
+        //        cmd.CommandText = @"INSERT INTO Bookings
+        //                            (EventDate, IngressTime, EventTime, EatingTime,
+        //                            Theme, AdultGuest, KidGuest, ClientID, Remarks, UserID, DateAdded)
+        //                            VALUES
+        //                            (@edate, @itime, @evtime, @eattime, @theme, @aguest, @kguest,
+        //                            @cid, @rmrks, @uid, @dadded); 
+        //                            SELECT TOP 1 BookingID FROM Bookings WHERE UserID = @ID ORDER BY BookingID DESC";
+        //        cmd.Parameters.AddWithValue("@edate", txtEventDate.Text);
+        //        cmd.Parameters.AddWithValue("@itime", txtIngressTime.Text);
+        //        cmd.Parameters.AddWithValue("@evtime", txtEventTime.Text);
+        //        cmd.Parameters.AddWithValue("@eattime", txtEatingTime.Text);
+        //        cmd.Parameters.AddWithValue("@theme", txtTheme.Text);
+        //        cmd.Parameters.AddWithValue("@aguest", txtAdultPax.Text);
+        //        cmd.Parameters.AddWithValue("@kguest", txtKidPax.Text);
+        //        cmd.Parameters.AddWithValue("@cid", hfName.Value);
+        //        cmd.Parameters.AddWithValue("@rmks", txtRemarks.Text);
+        //        cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
+        //        cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+        //        int bookingid = (int)cmd.ExecuteScalar();
+        //    }
+        //}
     }
 }
