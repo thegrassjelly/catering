@@ -64,20 +64,9 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-
-            if (ddlMainTable.SelectedValue == "Party Tray")
-            {
-                cmd.CommandText = @"SELECT MenuID, MenuName, Guest, DateAdded
-                                FROM Menu
-                                WHERE BookingID = '-1' AND UserID = @id";
-            }
-            else
-            {
-                cmd.CommandText = @"SELECT MenuID, MenuName, Guest, DateAdded
+            cmd.CommandText = @"SELECT MenuID, MenuName, Guest, DateAdded
                                 FROM Menu
                                 WHERE BookingDetailsID = '-1' AND UserID = @id";
-            }
-
             cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -340,32 +329,15 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-
-            if (ddlMainTable.SelectedValue == "Party Tray")
-            {
-                cmd.CommandText = @"INSERT INTO Menu
-                                (MenuName, Guest, BookingID, UserID, DateAdded)
-                                VALUES
-                                (@menuname, @guest, @bid, @uid, @dadded)";
-                cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
-                cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
-                cmd.Parameters.AddWithValue("@bid", "-1");
-                cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
-                cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            }
-            else
-            {
-                cmd.CommandText = @"INSERT INTO Menu
+            cmd.CommandText = @"INSERT INTO Menu
                                 (MenuName, Guest, BookingDetailsID, UserID, DateAdded)
                                 VALUES
                                 (@menuname, @guest, @bdid, @uid, @dadded)";
-                cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
-                cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
-                cmd.Parameters.AddWithValue("@bdid", "-1");
-                cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
-                cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            }
-
+            cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
+            cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
+            cmd.Parameters.AddWithValue("@bdid", "-1");
+            cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
+            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
             cmd.ExecuteNonQuery();
         }
 
@@ -467,7 +439,8 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
 
             if (ddlMainTable.SelectedValue == "Party Tray")
             {
-                InsertMenuBooking(cmd, bookingid);
+                int bdid = InsertBooking(cmd, bookingid);
+                InsertMenu(cmd, bdid);
                 InsertPayments(cmd, bookingid);
                 InsertSchedule(cmd);
             }
@@ -561,17 +534,6 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
                                 WHERE UserID = @id AND BookingDetailsID = '-1'";
         cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
         cmd.Parameters.AddWithValue("@bdid", bdid);
-        cmd.ExecuteNonQuery();
-    }
-
-    private void InsertMenuBooking(SqlCommand cmd, int bid)
-    {
-        cmd.Parameters.Clear();
-        cmd.CommandText = @"UPDATE Menu SET
-                                BookingID = @bid
-                                WHERE UserID = @id AND BookingID = '-1'";
-        cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
-        cmd.Parameters.AddWithValue("@bid", bid);
         cmd.ExecuteNonQuery();
     }
 
