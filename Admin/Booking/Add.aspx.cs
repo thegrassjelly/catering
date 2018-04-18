@@ -538,6 +538,30 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
             cmd.ExecuteNonQuery();
 
+            DateTime edt = Convert.ToDateTime(txtEventDT.Text);
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = @"INSERT INTO Scheduler
+                                (Type, StartDate, EndDate, AllDay, Subject, Location,
+                                OriginalOccurrenceStart, OriginalOccurrenceEnd, Description, Status,
+                                Label, TimeZoneID)
+                                VALUES
+                                (@type, @sdate, @edate, @aday, @sub, @loc, @oos, @ooe, @desc,
+                                @stat, @label, @tzid)";
+            cmd.Parameters.AddWithValue("@type", 0);
+            cmd.Parameters.AddWithValue("@sdate", edt);
+            cmd.Parameters.AddWithValue("@edate", edt.AddHours(3));
+            cmd.Parameters.AddWithValue("@aday", "False");
+            cmd.Parameters.AddWithValue("@sub", txtFN.Text + " " + txtLN.Text);
+            cmd.Parameters.AddWithValue("@loc", txtAddr.Text);
+            cmd.Parameters.AddWithValue("@oos", edt);
+            cmd.Parameters.AddWithValue("@ooe", edt.AddHours(3));
+            cmd.Parameters.AddWithValue("@desc", txtRemarks.Text);
+            cmd.Parameters.AddWithValue("@stat", 2);
+            cmd.Parameters.AddWithValue("@label", 0);
+            cmd.Parameters.AddWithValue("@tzid", "Singapore Standard Time");
+            cmd.ExecuteNonQuery();
+
             DateTime logdt = Convert.ToDateTime(txtEventDT.Text);
 
             Helper.Log("Add Booking",
