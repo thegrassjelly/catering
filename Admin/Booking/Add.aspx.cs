@@ -64,9 +64,20 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"SELECT MenuID, MenuName, Guest, DateAdded
+
+            if (ddlMainTable.SelectedValue == "Party Tray")
+            {
+                cmd.CommandText = @"SELECT MenuID, MenuName, Guest, DateAdded
+                                FROM Menu
+                                WHERE BookingID = '-1' AND UserID = @id";
+            }
+            else
+            {
+                cmd.CommandText = @"SELECT MenuID, MenuName, Guest, DateAdded
                                 FROM Menu
                                 WHERE BookingDetailsID = '-1' AND UserID = @id";
+            }
+
             cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -329,15 +340,32 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"INSERT INTO Menu
+
+            if (ddlMainTable.SelectedValue == "Party Tray")
+            {
+                cmd.CommandText = @"INSERT INTO Menu
+                                (MenuName, Guest, BookingID, UserID, DateAdded)
+                                VALUES
+                                (@menuname, @guest, @bid, @uid, @dadded)";
+                cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
+                cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
+                cmd.Parameters.AddWithValue("@bid", "-1");
+                cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
+                cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+            }
+            else
+            {
+                cmd.CommandText = @"INSERT INTO Menu
                                 (MenuName, Guest, BookingDetailsID, UserID, DateAdded)
                                 VALUES
                                 (@menuname, @guest, @bdid, @uid, @dadded)";
-            cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
-            cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
-            cmd.Parameters.AddWithValue("@bdid", "-1");
-            cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
-            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+                cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
+                cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
+                cmd.Parameters.AddWithValue("@bdid", "-1");
+                cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
+                cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+            }
+
             cmd.ExecuteNonQuery();
         }
 
@@ -437,8 +465,154 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
             int bookingid = (int)cmd.ExecuteScalar();
 
+            if (ddlMainTable.SelectedValue == "Party Tray")
+            {
+                InsertMenuBooking(cmd, bookingid);
+                InsertPayments(cmd, bookingid);
+                InsertSchedule(cmd);
+            }
+            else
+            {
+                int bdid = InsertBooking(cmd, bookingid);
+                InsertLinen(cmd, bdid);
+                InsertMenu(cmd, bdid);
+                InsertOtherDetails(cmd, bdid);
+                InsertPayments(cmd, bookingid);
+                InsertSchedule(cmd);
+            }
+
+            DateTime logdt = Convert.ToDateTime(txtEventDT.Text);
+
+            Helper.Log("Add Booking",
+                "Added new booking: " + txtLN.Text + ", " + txtFN.Text + " - " + txtAddr.Text + " - " + logdt
+                , "", Session["userid"].ToString());
+
+            Response.Redirect("View.aspx");
+        }
+    }
+
+    private void InsertSchedule(SqlCommand cmd)
+    {
+        DateTime edt = Convert.ToDateTime(txtEventDT.Text);
+
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"INSERT INTO Scheduler
+                                (Type, StartDate, EndDate, AllDay, Subject, Location,
+                                OriginalOccurrenceStart, OriginalOccurrenceEnd, Description, Status,
+                                Label, TimeZoneID)
+                                VALUES
+                                (@type, @sdate, @edate, @aday, @sub, @loc, @oos, @ooe, @desc,
+                                @stat, @label, @tzid)";
+        cmd.Parameters.AddWithValue("@type", 0);
+        cmd.Parameters.AddWithValue("@sdate", edt);
+        cmd.Parameters.AddWithValue("@edate", edt.AddHours(3));
+        cmd.Parameters.AddWithValue("@aday", "False");
+        cmd.Parameters.AddWithValue("@sub", txtFN.Text + " " + txtLN.Text);
+        cmd.Parameters.AddWithValue("@loc", txtAddr.Text);
+        cmd.Parameters.AddWithValue("@oos", edt);
+        cmd.Parameters.AddWithValue("@ooe", edt.AddHours(3));
+        cmd.Parameters.AddWithValue("@desc", txtRemarks.Text);
+        cmd.Parameters.AddWithValue("@stat", 2);
+        cmd.Parameters.AddWithValue("@label", 0);
+        cmd.Parameters.AddWithValue("@tzid", "Singapore Standard Time");
+        cmd.ExecuteNonQuery();
+    }
+
+    private void InsertPayments(SqlCommand cmd, int bookingid)
+    {
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"INSERT INTO Payments
+                                (BasicFee, MiscFee, OtherFee, DownPayment, Balance, Total, Status, BookingID, DateAdded)
+                                VALUES
+                                (@bfee, @mfee, @ofee, @dp, @blnce, @total, @status, @bid, @dadded)";
+        cmd.Parameters.AddWithValue("@bfee", txtBasicFee.Text);
+        cmd.Parameters.AddWithValue("@mfee", txtMiscFee.Text);
+        cmd.Parameters.AddWithValue("@ofee", txtOtherFee.Text);
+        cmd.Parameters.AddWithValue("@dp", txtDP.Text);
+        cmd.Parameters.AddWithValue("@blnce", txtBalance.Text);
+        cmd.Parameters.AddWithValue("@total", txtTotal.Text);
+        cmd.Parameters.AddWithValue("@status", "Pending");
+        cmd.Parameters.AddWithValue("@bid", bookingid);
+        cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+        cmd.ExecuteNonQuery();
+    }
+
+    private void InsertOtherDetails(SqlCommand cmd, int bdid)
+    {
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"INSERT INTO OtherDetails
+                                (BookingDetailsID, Stylist, Host, Planner, Media, DateAdded)
+                                VALUES
+                                (@bdid, @style, @hst, @plnnr, @mdia, @dadded)";
+        cmd.Parameters.AddWithValue("@bdid", bdid);
+        cmd.Parameters.AddWithValue("@style", txtStylist.Text);
+        cmd.Parameters.AddWithValue("@hst", txtHost.Text);
+        cmd.Parameters.AddWithValue("@plnnr", txtPlanner.Text);
+        cmd.Parameters.AddWithValue("@mdia", txtMedia.Text);
+        cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+        cmd.ExecuteNonQuery();
+    }
+
+    private void InsertMenu(SqlCommand cmd, int bdid)
+    {
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"UPDATE Menu SET
+                                BookingDetailsID = @bdid
+                                WHERE UserID = @id AND BookingDetailsID = '-1'";
+        cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
+        cmd.Parameters.AddWithValue("@bdid", bdid);
+        cmd.ExecuteNonQuery();
+    }
+
+    private void InsertMenuBooking(SqlCommand cmd, int bid)
+    {
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"UPDATE Menu SET
+                                BookingID = @bid
+                                WHERE UserID = @id AND BookingID = '-1'";
+        cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
+        cmd.Parameters.AddWithValue("@bid", bid);
+        cmd.ExecuteNonQuery();
+    }
+
+    private void InsertLinen(SqlCommand cmd, int bdid)
+    {
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"UPDATE BookingLinen SET
+                                BookingDetailsID = @bdid
+                                WHERE UserID = @id AND BookingDetailsID = '-1'";
+        cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
+        cmd.Parameters.AddWithValue("@bdid", bdid);
+        cmd.ExecuteNonQuery();
+
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"SELECT StockID, Qty FROM BookingLinen
+                                WHERE BookingDetailsID = @bdid AND UserID = @id";
+        cmd.Parameters.AddWithValue("@bdid", bdid);
+        cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
+        DataTable dt = new DataTable();
+        dt.Load(cmd.ExecuteReader());
+        cmd.Parameters.Clear();
+
+        foreach (DataRow dr in dt.Rows)
+        {
+            decimal qty = decimal.Parse(dr["Qty"].ToString());
+            int stockid = int.Parse(dr["StockID"].ToString());
+
+            cmd.CommandText = @"UPDATE Stocks SET Qty -= @bookingqty, DateModified = @dmod
+                                    WHERE StockID = @sid";
+            cmd.Parameters.AddWithValue("@bookingqty", qty);
+            cmd.Parameters.AddWithValue("@sid", stockid);
+            cmd.Parameters.AddWithValue("@dmod", Helper.PHTime());
+            cmd.ExecuteNonQuery();
             cmd.Parameters.Clear();
-            cmd.CommandText = @"INSERT INTO BookingDetails
+        }
+    }
+
+    private int InsertBooking(SqlCommand cmd, int bookingid)
+    {
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"INSERT INTO BookingDetails
                                 (BookingID, MainTable, EightSeater, MonoBlock, KiddieTables, BuffetTables,
                                 Utensils, RollTop, ChafingDish, Flowers, HeadWaiter, WaterIce,
                                 EightSeaterRound, Napkin, ChairCover, BuffetDir, BuffetSkir, BuffetCrump,
@@ -448,127 +622,45 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
                                 @flr, @hwaiter, @wice, @eightsr, @npkn, @ccover, @bdir, @bskir, @bcrump,
                                 @uid, @dadded)
                                 SELECT TOP 1 BookingDetailsID FROM BookingDetails WHERE UserID = @uid ORDER BY BookingDetailsID DESC";
-            cmd.Parameters.AddWithValue("@bid", bookingid);
-            cmd.Parameters.AddWithValue("@mtable", ddlMainTable.SelectedValue);
-            cmd.Parameters.AddWithValue("@eightseat", txtEightSeater.Text);
-            cmd.Parameters.AddWithValue("@monob", txtMonoblock.Text);
-            cmd.Parameters.AddWithValue("@ktables", txtKiddieTables.Text);
-            cmd.Parameters.AddWithValue("@btables", txtBuffetTables.Text);
-            cmd.Parameters.AddWithValue("@uten", txtUtensils.Text);
-            cmd.Parameters.AddWithValue("@rtop", txtRollTop.Text);
-            cmd.Parameters.AddWithValue("@cdish", txtChafingDish.Text);
-            cmd.Parameters.AddWithValue("@flr", txtFlowers.Text);
-            cmd.Parameters.AddWithValue("@hwaiter", txtHeadWaiter.Text);
-            cmd.Parameters.AddWithValue("@wice", txtWaterIce.Text);
-            cmd.Parameters.AddWithValue("@eightsr", txtEightSeaterRound.Text);
-            cmd.Parameters.AddWithValue("@npkn", txtNapkin.Text);
-            cmd.Parameters.AddWithValue("@ccover", txtChairCover.Text);
-            cmd.Parameters.AddWithValue("@bdir", txtBuffetDir.Text);
-            cmd.Parameters.AddWithValue("@bskir", txtBuffetSkir.Text);
-            cmd.Parameters.AddWithValue("@bcrump", txtBuffetCrump.Text);
-            cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
-            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            int bdid = (int)cmd.ExecuteScalar();
+        cmd.Parameters.AddWithValue("@bid", bookingid);
+        cmd.Parameters.AddWithValue("@mtable", ddlMainTable.SelectedValue);
+        cmd.Parameters.AddWithValue("@eightseat", txtEightSeater.Text);
+        cmd.Parameters.AddWithValue("@monob", txtMonoblock.Text);
+        cmd.Parameters.AddWithValue("@ktables", txtKiddieTables.Text);
+        cmd.Parameters.AddWithValue("@btables", txtBuffetTables.Text);
+        cmd.Parameters.AddWithValue("@uten", txtUtensils.Text);
+        cmd.Parameters.AddWithValue("@rtop", txtRollTop.Text);
+        cmd.Parameters.AddWithValue("@cdish", txtChafingDish.Text);
+        cmd.Parameters.AddWithValue("@flr", txtFlowers.Text);
+        cmd.Parameters.AddWithValue("@hwaiter", txtHeadWaiter.Text);
+        cmd.Parameters.AddWithValue("@wice", txtWaterIce.Text);
+        cmd.Parameters.AddWithValue("@eightsr", txtEightSeaterRound.Text);
+        cmd.Parameters.AddWithValue("@npkn", txtNapkin.Text);
+        cmd.Parameters.AddWithValue("@ccover", txtChairCover.Text);
+        cmd.Parameters.AddWithValue("@bdir", txtBuffetDir.Text);
+        cmd.Parameters.AddWithValue("@bskir", txtBuffetSkir.Text);
+        cmd.Parameters.AddWithValue("@bcrump", txtBuffetCrump.Text);
+        cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
+        cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+        int bdid = (int)cmd.ExecuteScalar();
+        return bdid;
+    }
 
-            cmd.Parameters.Clear();
-            cmd.CommandText = @"UPDATE BookingLinen SET
-                                BookingDetailsID = @bdid
-                                WHERE UserID = @id AND BookingDetailsID = '-1'";
-            cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
-            cmd.Parameters.AddWithValue("@bdid", bdid);
-            cmd.ExecuteNonQuery();
-
-            cmd.Parameters.Clear();
-            cmd.CommandText = @"SELECT StockID, Qty FROM BookingLinen
-                                WHERE BookingDetailsID = @bdid AND UserID = @id";
-            cmd.Parameters.AddWithValue("@bdid", bdid);
-            cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
-            DataTable dt = new DataTable();
-            dt.Load(cmd.ExecuteReader());
-            cmd.Parameters.Clear();
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                decimal qty = decimal.Parse(dr["Qty"].ToString());
-                int stockid = int.Parse(dr["StockID"].ToString());
-
-                cmd.CommandText = @"UPDATE Stocks SET Qty -= @bookingqty, DateModified = @dmod
-                                    WHERE StockID = @sid";
-                cmd.Parameters.AddWithValue("@bookingqty", qty);
-                cmd.Parameters.AddWithValue("@sid", stockid);
-                cmd.Parameters.AddWithValue("@dmod", Helper.PHTime());
-                cmd.ExecuteNonQuery();
-                cmd.Parameters.Clear();
-            }
-
-            cmd.Parameters.Clear();
-            cmd.CommandText = @"UPDATE Menu SET
-                                BookingDetailsID = @bdid
-                                WHERE UserID = @id AND BookingDetailsID = '-1'";
-            cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
-            cmd.Parameters.AddWithValue("@bdid", bdid);
-            cmd.ExecuteNonQuery();
-
-            cmd.Parameters.Clear();
-            cmd.CommandText = @"INSERT INTO OtherDetails
-                                (BookingDetailsID, Stylist, Host, Planner, Media, DateAdded)
-                                VALUES
-                                (@bdid, @style, @hst, @plnnr, @mdia, @dadded)";
-            cmd.Parameters.AddWithValue("@bdid", bdid);
-            cmd.Parameters.AddWithValue("@style", txtStylist.Text);
-            cmd.Parameters.AddWithValue("@hst", txtHost.Text);
-            cmd.Parameters.AddWithValue("@plnnr", txtPlanner.Text);
-            cmd.Parameters.AddWithValue("@mdia", txtMedia.Text);
-            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            cmd.ExecuteNonQuery();
-
-            cmd.Parameters.Clear();
-            cmd.CommandText = @"INSERT INTO Payments
-                                (BasicFee, MiscFee, OtherFee, DownPayment, Balance, Total, Status, BookingID, DateAdded)
-                                VALUES
-                                (@bfee, @mfee, @ofee, @dp, @blnce, @total, @status, @bid, @dadded)";
-            cmd.Parameters.AddWithValue("@bfee", txtBasicFee.Text);
-            cmd.Parameters.AddWithValue("@mfee", txtMiscFee.Text);
-            cmd.Parameters.AddWithValue("@ofee", txtOtherFee.Text);
-            cmd.Parameters.AddWithValue("@dp", txtDP.Text);
-            cmd.Parameters.AddWithValue("@blnce", txtBalance.Text);
-            cmd.Parameters.AddWithValue("@total", txtTotal.Text);
-            cmd.Parameters.AddWithValue("@status", "Pending");
-            cmd.Parameters.AddWithValue("@bid", bookingid);
-            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            cmd.ExecuteNonQuery();
-
-            DateTime edt = Convert.ToDateTime(txtEventDT.Text);
-
-            cmd.Parameters.Clear();
-            cmd.CommandText = @"INSERT INTO Scheduler
-                                (Type, StartDate, EndDate, AllDay, Subject, Location,
-                                OriginalOccurrenceStart, OriginalOccurrenceEnd, Description, Status,
-                                Label, TimeZoneID)
-                                VALUES
-                                (@type, @sdate, @edate, @aday, @sub, @loc, @oos, @ooe, @desc,
-                                @stat, @label, @tzid)";
-            cmd.Parameters.AddWithValue("@type", 0);
-            cmd.Parameters.AddWithValue("@sdate", edt);
-            cmd.Parameters.AddWithValue("@edate", edt.AddHours(3));
-            cmd.Parameters.AddWithValue("@aday", "False");
-            cmd.Parameters.AddWithValue("@sub", txtFN.Text + " " + txtLN.Text);
-            cmd.Parameters.AddWithValue("@loc", txtAddr.Text);
-            cmd.Parameters.AddWithValue("@oos", edt);
-            cmd.Parameters.AddWithValue("@ooe", edt.AddHours(3));
-            cmd.Parameters.AddWithValue("@desc", txtRemarks.Text);
-            cmd.Parameters.AddWithValue("@stat", 2);
-            cmd.Parameters.AddWithValue("@label", 0);
-            cmd.Parameters.AddWithValue("@tzid", "Singapore Standard Time");
-            cmd.ExecuteNonQuery();
-
-            DateTime logdt = Convert.ToDateTime(txtEventDT.Text);
-
-            Helper.Log("Add Booking",
-                "Added new booking: " + txtLN.Text + ", " + txtFN.Text + " - " + txtAddr.Text + " - " + logdt
-                , "", Session["userid"].ToString());
-
-            Response.Redirect("View.aspx");
+    protected void ddlMainTable_OnSelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlMainTable.SelectedValue == "Party Tray")
+        {
+            pnlHides.Visible = false;
+            pnlHides2.Visible = false;
+            pnlHides3.Visible = false;
+            pnlHides4.Visible = false;
+        }
+        else
+        {
+            pnlHides.Visible = true;
+            pnlHides2.Visible = true;
+            pnlHides3.Visible = true;
+            pnlHides4.Visible = true;
         }
     }
 }

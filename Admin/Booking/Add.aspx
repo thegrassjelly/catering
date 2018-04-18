@@ -314,39 +314,41 @@
                                                          TextMode="DateTimeLocal" runat="server" />
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Ingress Time</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtIngressTime" class="form-control" 
-                                                         TextMode="Time" runat="server" />
+                                    <div id="pnlHides" runat="server">
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Ingress Time</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtIngressTime" class="form-control"
+                                                    TextMode="Time" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Eating Time</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtEatingTime" class="form-control" 
-                                                         TextMode="Time" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Eating Time</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtEatingTime" class="form-control"
+                                                    TextMode="Time" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Theme</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtTheme" class="form-control" 
-                                                         runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Theme</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtTheme" class="form-control"
+                                                    runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Adult Guest (pax)</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtAdultPax" class="form-control" 
-                                                         TextMode="number" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Adult Guest (pax)</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtAdultPax" class="form-control"
+                                                    TextMode="number" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Kid Guest (pax)</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtKidPax" class="form-control" 
-                                                         TextMode="number" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Kid Guest (pax)</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtKidPax" class="form-control"
+                                                    TextMode="number" runat="server" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -361,56 +363,60 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-4">Main Table (with stand)</label>
                                         <div class="col-lg-7">
-                                            <asp:DropDownList ID="ddlMainTable" class="form-control" runat="server">
+                                            <asp:DropDownList ID="ddlMainTable" class="form-control" runat="server"
+                                                              AutoPostback="True" OnSelectedIndexChanged="ddlMainTable_OnSelectedIndexChanged">
                                                 <asp:ListItem>10 Seater Round</asp:ListItem>
                                                 <asp:ListItem>Cocktail Table</asp:ListItem>
+                                                <asp:ListItem>Party Tray</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">8 Seater Table</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtEightSeater" class="form-control" runat="server" />
+                                    <div id="pnlHides2" runat="server">
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">8 Seater Table</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtEightSeater" class="form-control" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Monobloc Chairs w/ Cover</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtMonoblock" class="form-control" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Monobloc Chairs w/ Cover</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtMonoblock" class="form-control" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Kiddie Tables and Chairs</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtKiddieTables" class="form-control" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Kiddie Tables and Chairs</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtKiddieTables" class="form-control" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Buffet Tables</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtBuffetTables" class="form-control" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Buffet Tables</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtBuffetTables" class="form-control" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Utensils</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtUtensils" class="form-control" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Utensils</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtUtensils" class="form-control" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Roll Top</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtRollTop" class="form-control" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Roll Top</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtRollTop" class="form-control" runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-4">Chafing Dish</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtChafingDish" class="form-control" runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-4">Chafing Dish</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtChafingDish" class="form-control" runat="server" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
+                                <div id="pnlHides3" class="col-lg-4" runat="server">
                                     <div class="form-group">
                                         <label class="control-label col-lg-4">Flowers</label>
                                         <div class="col-lg-7">
@@ -466,114 +472,115 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
-                                    <div class="panel panel-midnightblue">
-                                        <div class="panel-heading">
-                                            Linens
-                                        </div>
-                                        <div class="panel-body">
-                                            <div id="pnlStockError" runat="server" visible="false">
-                                                <div class="alert alert-danger">
-                                                    <b>Select a stock to add</b>
-                                                </div>
+                                <div id="pnlHides4" runat="server">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-midnightblue">
+                                            <div class="panel-heading">
+                                                Linens
                                             </div>
-                                            <div id="pnlStockExist" runat="server" visible="false">
-                                                <div class="alert alert-danger">
-                                                    <b>Stock already added</b>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-3">Stock Type</label>
-                                                    <div class="col-lg-6">
-                                                        <asp:DropDownList ID="ddlStockType" class="form-control"
-                                                                          runat="server" />
+                                            <div class="panel-body">
+                                                <div id="pnlStockError" runat="server" visible="false">
+                                                    <div class="alert alert-danger">
+                                                        <b>Select a stock to add</b>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-3">Stock Name</label>
-                                                    <div class="col-lg-5">
-                                                        <asp:TextBox ID="txtStockName" class="autosuggest form-control" runat="server" />
+                                                <div id="pnlStockExist" runat="server" visible="false">
+                                                    <div class="alert alert-danger">
+                                                        <b>Stock already added</b>
                                                     </div>
-                                                    <div class="col-lg-2">
-                                                        <asp:LinkButton ID="btnStock" runat="server" OnClick="btnStock_OnClick" CssClass="btn btn-success"> 
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-3">Stock Type</label>
+                                                        <div class="col-lg-6">
+                                                            <asp:DropDownList ID="ddlStockType" class="form-control"
+                                                                runat="server" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-3">Stock Name</label>
+                                                        <div class="col-lg-5">
+                                                            <asp:TextBox ID="txtStockName" class="autosuggest form-control" runat="server" />
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <asp:LinkButton ID="btnStock" runat="server" OnClick="btnStock_OnClick" CssClass="btn btn-success"> 
                                                             <i class="fa fa-refresh"></i></asp:LinkButton>
+                                                        </div>
+                                                        <asp:HiddenField runat="server" Value="0" ID="hfName2" />
                                                     </div>
-                                                    <asp:HiddenField runat="server" Value="0" ID="hfName2" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-3">Quantity</label>
-                                                    <div class="col-lg-3">
-                                                        <asp:TextBox ID="txtLinenQty" class="form-control"
-                                                                     TextMode="Number" runat="server" />
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-3">Quantity</label>
+                                                        <div class="col-lg-3">
+                                                            <asp:TextBox ID="txtLinenQty" class="form-control"
+                                                                TextMode="Number" runat="server" />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-3"></label>
-                                                    <div class="col-lg-6">
-                                                        <asp:Button ID="btnAddLinen" class="btn btn-success" runat="server" Text="Add Linen"
-                                                                    OnClick="btnAddLinen_OnClick" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-4">Available Quantity</label>
-                                                    <div class="col-lg-3">
-                                                        <asp:TextBox ID="txtQty" class="form-control"
-                                                                     runat="server" disabled />
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-3"></label>
+                                                        <div class="col-lg-6">
+                                                            <asp:Button ID="btnAddLinen" class="btn btn-success" runat="server" Text="Add Linen"
+                                                                OnClick="btnAddLinen_OnClick" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-4">Stock Description</label>
-                                                    <div class="col-lg-6">
-                                                        <asp:TextBox ID="txtStockDesc" class="form-control" style="max-width: 100%"
-                                                                     TextMode="Multiline" runat="server" disabled />
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-4">Available Quantity</label>
+                                                        <div class="col-lg-3">
+                                                            <asp:TextBox ID="txtQty" class="form-control"
+                                                                runat="server" disabled />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-4">Stock Description</label>
+                                                        <div class="col-lg-6">
+                                                            <asp:TextBox ID="txtStockDesc" class="form-control" Style="max-width: 100%"
+                                                                TextMode="Multiline" runat="server" disabled />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <hr />
-                                            </div>
-                                            <table class="table table-striped table-hover">
-                                                <thead>
-                                                    <th>Stock Type</th>
-                                                    <th>Stock Name</th>
-                                                    <th>Quantity</th>
-                                                    <th>Description</th>
-                                                    <th>Date Added</th>
-                                                </thead>
-                                                <tbody>
-                                                    <asp:ListView ID="lvLinen" runat="server"
-                                                        OnPagePropertiesChanging="lvLinen_OnPagePropertiesChanging"
-                                                        OnDataBound="lvLinen_OnDataBound"
-                                                        OnItemCommand="lvLinen_OnItemCommand">
-                                                        <ItemTemplate>
-                                                            <tr>
-                                                                <td><%# Eval("StockTypeName") %></td>
-                                                                <asp:Literal ID="ltBLID" runat="server" Text='<%# Eval("BookingLinenID") %>' Visible="false" />
-                                                                <td><%# Eval("StockName") %></td>
-                                                                <td><%# Eval("Qty") %></td>
-                                                                <td><%# Eval("StockDescription") %></td>
-                                                                <td><%# Eval("DateAdded", "{0: MMMM d, yyyy}") %></td>
-                                                                <td>
-                                                                    <asp:Button ID="btnRemoveLinen" CommandName="delitem"
-                                                                                class="btn btn-sm btn-danger" runat="server" Text='Remove Linen'
-                                                                                OnSubmitBehavior="false" formnovalidate />
-                                                                </td>
-                                                            </tr>
-                                                        </ItemTemplate>
-                                                        <EmptyDataTemplate>
-                                                            <tr>
-                                                                <td colspan="12">
-                                                                    <h2 class="text-center">No records found.</h2>
-                                                                </td>
-                                                            </tr>
-                                                        </EmptyDataTemplate>
-                                                    </asp:ListView>
-                                                </tbody>
-                                            </table>
-                                            <center>
+                                                <div class="col-lg-12">
+                                                    <hr />
+                                                </div>
+                                                <table class="table table-striped table-hover">
+                                                    <thead>
+                                                        <th>Stock Type</th>
+                                                        <th>Stock Name</th>
+                                                        <th>Quantity</th>
+                                                        <th>Description</th>
+                                                        <th>Date Added</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <asp:ListView ID="lvLinen" runat="server"
+                                                            OnPagePropertiesChanging="lvLinen_OnPagePropertiesChanging"
+                                                            OnDataBound="lvLinen_OnDataBound"
+                                                            OnItemCommand="lvLinen_OnItemCommand">
+                                                            <ItemTemplate>
+                                                                <tr>
+                                                                    <td><%# Eval("StockTypeName") %></td>
+                                                                    <asp:Literal ID="ltBLID" runat="server" Text='<%# Eval("BookingLinenID") %>' Visible="false" />
+                                                                    <td><%# Eval("StockName") %></td>
+                                                                    <td><%# Eval("Qty") %></td>
+                                                                    <td><%# Eval("StockDescription") %></td>
+                                                                    <td><%# Eval("DateAdded", "{0: MMMM d, yyyy}") %></td>
+                                                                    <td>
+                                                                        <asp:Button ID="btnRemoveLinen" CommandName="delitem"
+                                                                            class="btn btn-sm btn-danger" runat="server" Text='Remove Linen'
+                                                                            OnSubmitBehavior="false" formnovalidate />
+                                                                    </td>
+                                                                </tr>
+                                                            </ItemTemplate>
+                                                            <EmptyDataTemplate>
+                                                                <tr>
+                                                                    <td colspan="12">
+                                                                        <h2 class="text-center">No records found.</h2>
+                                                                    </td>
+                                                                </tr>
+                                                            </EmptyDataTemplate>
+                                                        </asp:ListView>
+                                                    </tbody>
+                                                </table>
+                                                <center>
                                                 <asp:DataPager id="dpLinen" runat="server" pageSize="5" PagedControlID="lvLinen">
                                                     <Fields>
                                                         <asp:NumericPagerField Buttontype="Button"
@@ -584,38 +591,39 @@
                                                     </Fields>
                                                 </asp:DataPager>
                                             </center>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-3">Stylist</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtStylist" class="form-control" 
-                                                         runat="server" />
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Stylist</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtStylist" class="form-control"
+                                                    runat="server" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Host</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtHost" class="form-control"
+                                                    runat="server" />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-3">Host</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtHost" class="form-control" 
-                                                         runat="server" />
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Planner</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtPlanner" class="form-control"
+                                                    runat="server" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-3">Planner</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtPlanner" class="form-control" 
-                                                         runat="server" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-lg-3">Media</label>
-                                        <div class="col-lg-7">
-                                            <asp:TextBox ID="txtMedia" class="form-control" 
-                                                         runat="server" />
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Media</label>
+                                            <div class="col-lg-7">
+                                                <asp:TextBox ID="txtMedia" class="form-control"
+                                                    runat="server" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
