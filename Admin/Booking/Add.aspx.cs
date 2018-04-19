@@ -99,8 +99,8 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
             lvLinen.DataBind();
         }
     }
-    [WebMethod]
 
+    [WebMethod]
     public static List<string> GetName(string prefixText)
     {
         List<string> name = new List<string>();
@@ -442,7 +442,7 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
                 int bdid = InsertBooking(cmd, bookingid);
                 InsertMenu(cmd, bdid);
                 InsertPayments(cmd, bookingid);
-                InsertSchedule(cmd);
+                InsertSchedule(cmd, bookingid);
             }
             else
             {
@@ -451,7 +451,7 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
                 InsertMenu(cmd, bdid);
                 InsertOtherDetails(cmd, bdid);
                 InsertPayments(cmd, bookingid);
-                InsertSchedule(cmd);
+                InsertSchedule(cmd, bookingid);
             }
 
             DateTime logdt = Convert.ToDateTime(txtEventDT.Text);
@@ -464,7 +464,7 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         }
     }
 
-    private void InsertSchedule(SqlCommand cmd)
+    private void InsertSchedule(SqlCommand cmd, int bid)
     {
         DateTime edt = Convert.ToDateTime(txtEventDT.Text);
 
@@ -472,10 +472,10 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         cmd.CommandText = @"INSERT INTO Scheduler
                                 (Type, StartDate, EndDate, AllDay, Subject, Location,
                                 OriginalOccurrenceStart, OriginalOccurrenceEnd, Description, Status,
-                                Label, TimeZoneID)
+                                Label, CustomField, TimeZoneID)
                                 VALUES
                                 (@type, @sdate, @edate, @aday, @sub, @loc, @oos, @ooe, @desc,
-                                @stat, @label, @tzid)";
+                                @stat, @label, @bid, @tzid)";
         cmd.Parameters.AddWithValue("@type", 0);
         cmd.Parameters.AddWithValue("@sdate", edt);
         cmd.Parameters.AddWithValue("@edate", edt.AddHours(3));
@@ -487,6 +487,7 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         cmd.Parameters.AddWithValue("@desc", txtRemarks.Text);
         cmd.Parameters.AddWithValue("@stat", 2);
         cmd.Parameters.AddWithValue("@label", 0);
+        cmd.Parameters.AddWithValue("@bid", bid);
         cmd.Parameters.AddWithValue("@tzid", "Singapore Standard Time");
         cmd.ExecuteNonQuery();
     }

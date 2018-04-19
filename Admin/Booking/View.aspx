@@ -73,7 +73,7 @@
                                                 <td><%# Eval("DateAdded", "{0: dddd, MMMM d, yyyy}") %></td>
                                                 <td>
                                                     <a href='UpdateBooking.aspx?ID=<%# Eval("BookingID") %>'>
-                                                        <asp:Label runat="server" ToolTip="Show Info"><i class="fa fa-edit"></i></asp:Label></a>
+                                                        <asp:Label runat="server" ToolTip="Show Info"><i class="fa fa-search"></i></asp:Label></a>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
