@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="PBAP">
     <meta name="author" content="The Red Team">
+    <link rel="shortcut icon" href="<%= Page.ResolveUrl("~/Admin/assets/img/favicon.ico") %>" type="image/x-icon" />
 
     <!-- <link href="assets/less/styles.less" rel="stylesheet/less" media="all"> -->
     <link rel="stylesheet" href="assets/css/styles.css">

@@ -132,7 +132,14 @@
                     <a href="javascript:;"><i class="fa fa-id-card fa-lg"></i><span>Payments</span></a>
                     <ul class="acc-menu">
                         <%--                        <li><a href="<%= Page.ResolveUrl("~/Admin/Payment/Add.aspx") %>"><i class="fa fa-plus"></i>Add Payment</a></li>--%>
-                        <li><a href="<%= Page.ResolveUrl("~/Admin/Payment/View.aspx") %>"><i class="fa fa-list"></i>View Payment</a></li>
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Payments/View.aspx") %>"><i class="fa fa-list"></i>View Payment</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:;"><i class="fa fa-dollar fa-lg"></i><span>Cheques</span></a>
+                    <ul class="acc-menu">
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/Add.aspx") %>"><i class="fa fa-plus"></i>Add Payment</a></li>
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/View.aspx") %>"><i class="fa fa-list"></i>View Cheques</a></li>
                     </ul>
                 </li>
                 <li>

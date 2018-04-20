@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class Admin_Booking_View : System.Web.UI.Page
@@ -31,7 +27,23 @@ public partial class Admin_Booking_View : System.Web.UI.Page
 
             if (ddlBookingType.SelectedValue == "All Bookings")
             {
-                cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
+                if (ddlPaymentStatus.SelectedValue == "All Status")
+                {
+                    cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
+                                    MainTable, Address, EventDateTime, Status,
+                                    Bookings.DateAdded, Bookings.BookingID
+                                    FROM Bookings
+                                    INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
+                                    INNER JOIN BookingDetails ON Bookings.BookingID = BookingDetails.BookingID
+                                    INNER JOIN Payments ON Bookings.BookingID = Payments.BookingID
+                                    WHERE
+                                    (ContactFirstName LIKE @keyword OR
+                                    ContactLastName LIKE @keyword OR
+                                    Address LIKE @keyword) ORDER BY Bookings.DateAdded DESC";
+                }
+                else
+                {
+                    cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
                                     MainTable, Address, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
@@ -42,11 +54,30 @@ public partial class Admin_Booking_View : System.Web.UI.Page
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
                                     Address LIKE @keyword) AND 
-                                    Status = @status ORDER BY Bookings.DateAdded ASC";
+                                    Status = @status ORDER BY Bookings.DateAdded DESC";
+                }
+
             }
             else
             {
-                cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
+                if (ddlPaymentStatus.SelectedValue == "All Status")
+                {
+                    cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
+                                    MainTable, Address, EventDateTime, Status,
+                                    Bookings.DateAdded, Bookings.BookingID
+                                    FROM Bookings
+                                    INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
+                                    INNER JOIN BookingDetails ON Bookings.BookingID = BookingDetails.BookingID
+                                    INNER JOIN Payments ON Bookings.BookingID = Payments.BookingID
+                                    WHERE
+                                    (ContactFirstName LIKE @keyword OR
+                                    ContactLastName LIKE @keyword OR
+                                    Address LIKE @keyword) AND MainTable = @bookingtype
+                                    ORDER BY Bookings.DateAdded DESC";
+                }
+                else
+                {
+                    cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
                                     MainTable, Address, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
@@ -58,7 +89,8 @@ public partial class Admin_Booking_View : System.Web.UI.Page
                                     ContactLastName LIKE @keyword OR
                                     Address LIKE @keyword) AND 
                                     Status = @status AND MainTable = @bookingtype
-                                    ORDER BY Bookings.DateAdded ASC";
+                                    ORDER BY Bookings.DateAdded DESC";
+                }
             }
 
             cmd.Parameters.AddWithValue("@status", ddlPaymentStatus.SelectedValue);

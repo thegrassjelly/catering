@@ -27,6 +27,7 @@
                                     <div class="input-group">
                                         <asp:DropDownList ID="ddlPaymentStatus" runat="server" class="form-control"
                                             AutoPostBack="True" OnSelectedIndexChanged="ddlPaymentStatus_OnSelectedIndexChanged">
+                                            <asp:ListItem Text="All Status" Value="All Status" />
                                             <asp:ListItem Text="Pending" Value="Pending" />
                                             <asp:ListItem Text="Paid" Value="Paid" />
                                         </asp:DropDownList>
