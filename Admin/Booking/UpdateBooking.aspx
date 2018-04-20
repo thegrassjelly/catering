@@ -402,6 +402,7 @@
                                                         <asp:TextBox ID="txtLinenQty" class="form-control"
                                                             TextMode="Number" runat="server" />
                                                     </div>
+                                                    <span style="font-size: small;">Note: Always update booking after adding/deleting linen items</span>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-lg-3"></label>
@@ -447,6 +448,8 @@
                                                             <tr>
                                                                 <td><%# Eval("StockTypeName") %></td>
                                                                 <asp:Literal ID="ltBLID" runat="server" Text='<%# Eval("BookingLinenID") %>' Visible="false" />
+                                                                <asp:Literal ID="ltStockID" runat="server" Text='<%# Eval("StockID") %>' Visible="false" />
+                                                                <asp:Literal ID="ltQty" runat="server" Text='<%# Eval("Qty") %>' Visible="false" />
                                                                 <td><%# Eval("StockName") %></td>
                                                                 <td><%# Eval("Qty") %></td>
                                                                 <td><%# Eval("StockDescription") %></td>

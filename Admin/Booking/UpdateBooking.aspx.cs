@@ -181,12 +181,12 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"SELECT StockTypeName, BookingLinenID, StockName, BookingLinen.Qty, StockDescription,
+            cmd.CommandText = @"SELECT BookingLinen.StockID, StockTypeName, BookingLinenID, StockName, BookingLinen.Qty, StockDescription,
                                 BookingLinen.DateAdded
                                 FROM BookingLinen
                                 INNER JOIN Stocks ON BookingLinen.StockID = Stocks.StockID
                                 INNER JOIN StockType ON Stocks.StockTypeID = StockType.StockTypeID
-                                WHERE BookingDetailsID = @id";
+                                WHERE BookingDetailsID = @id OR BookingDetailsID = '0'";
             cmd.Parameters.AddWithValue("@id", bdid);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -388,16 +388,47 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
             }
             else
             {
+                UpdateLinensQty(cmd);
                 UpdateOtherDetails(cmd);
                 UpdatePayments(cmd);
                 UpdateScheduler(cmd);
             }
-
-            cmd.Parameters.Clear();
-
         }
 
         Response.Redirect("View.aspx");
+    }
+
+    private void UpdateLinensQty(SqlCommand cmd)
+    {
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"SELECT StockID, Qty FROM BookingLinen
+                                WHERE BookingDetailsID = @bdid AND UserID = @id";
+        cmd.Parameters.AddWithValue("@bdid", 0);
+        cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
+        DataTable dt = new DataTable();
+        dt.Load(cmd.ExecuteReader());
+        cmd.Parameters.Clear();
+
+        foreach (DataRow dr in dt.Rows)
+        {
+            decimal qty = decimal.Parse(dr["Qty"].ToString());
+            int stockid = int.Parse(dr["StockID"].ToString());
+
+            cmd.CommandText = @"UPDATE Stocks SET Qty -= @bookingqty, DateModified = @dmod
+                                    WHERE StockID = @sid";
+            cmd.Parameters.AddWithValue("@bookingqty", qty);
+            cmd.Parameters.AddWithValue("@sid", stockid);
+            cmd.Parameters.AddWithValue("@dmod", Helper.PHTime());
+            cmd.ExecuteNonQuery();
+            cmd.Parameters.Clear();
+        }
+
+        cmd.Parameters.Clear();
+        cmd.CommandText = @"UPDATE BookingLinen SET BookingDetailsID = @bdid
+                            WHERE BookingDetailsID = '0' AND UserID = @id";
+        cmd.Parameters.AddWithValue("@id", Session["userid"].ToString());
+        cmd.Parameters.AddWithValue("@bdid", _bdid);
+        cmd.ExecuteNonQuery();
     }
 
     private void UpdateScheduler(SqlCommand cmd)
@@ -506,7 +537,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
                                 (@sid, @qty, @bdid, @uid, @dadded)";
                     cmd.Parameters.AddWithValue("@sid", hfName2.Value);
                     cmd.Parameters.AddWithValue("@qty", txtLinenQty.Text);
-                    cmd.Parameters.AddWithValue("@bdid", _bdid);
+                    cmd.Parameters.AddWithValue("@bdid", 0);
                     cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
                     cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
                     cmd.ExecuteNonQuery();
@@ -562,12 +593,25 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
     protected void lvLinen_OnItemCommand(object sender, ListViewCommandEventArgs e)
     {
         Literal ltBLID = (Literal)e.Item.FindControl("ltBLID");
+        Literal ltStockID = (Literal)e.Item.FindControl("ltStockID");
+        Literal ltQty = (Literal)e.Item.FindControl("ltQty");
 
+        int stockid = int.Parse(ltStockID.Text);
+        int qty = int.Parse(ltQty.Text);
+            
         using (var con = new SqlConnection(Helper.GetCon()))
         using (var cmd = new SqlCommand())
         {
             con.Open();
             cmd.Connection = con;
+
+            cmd.CommandText = @"UPDATE Stocks SET Qty += @qty, DateModified = @dmod
+                                WHERE StockID = @sid";
+            cmd.Parameters.AddWithValue("@qty", qty);
+            cmd.Parameters.AddWithValue("@sid", stockid);
+            cmd.Parameters.AddWithValue("@dmod", Helper.PHTime());
+            cmd.ExecuteNonQuery();
+
             cmd.CommandText = @"DELETE FROM BookingLinen
                                 WHERE BookingLinenID = @id";
             cmd.Parameters.AddWithValue("@id", ltBLID.Text);

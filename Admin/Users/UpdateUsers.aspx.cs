@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Admin_Users_UpdateUsers : System.Web.UI.Page
 {
@@ -64,18 +59,14 @@ public partial class Admin_Users_UpdateUsers : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@id", userId);
             using (var dr = cmd.ExecuteReader())
             {
-                if (dr.HasRows)
-                {
-                    if (dr.Read())
-                    {
-                        txtID.Text = dr["UserID"].ToString();
-                        txtFN.Text = dr["FirstName"].ToString();
-                        txtLN.Text = dr["LastName"].ToString();
-                        txtUName.Text = dr["UserName"].ToString();
-                        ddlStatus.SelectedValue = dr["Status"].ToString();
-                        ddlType.SelectedValue = dr["TypeID"].ToString();
-                    }
-                }
+                if (!dr.HasRows) return;
+                if (!dr.Read()) return;
+                txtID.Text = dr["UserID"].ToString();
+                txtFN.Text = dr["FirstName"].ToString();
+                txtLN.Text = dr["LastName"].ToString();
+                txtUName.Text = dr["UserName"].ToString();
+                ddlStatus.SelectedValue = dr["Status"].ToString();
+                ddlType.SelectedValue = dr["TypeID"].ToString();
             }
         }
     }

@@ -29,7 +29,7 @@ public partial class Admin_Inventory_View : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"SELECT DISTINCT StockTypeName FROM StockType";
+            cmd.CommandText = @"SELECT DISTINCT StockTypeName FROM StockType WHERE Status = 'Active'";
             SqlDataReader dr = cmd.ExecuteReader();
             ddlType.DataSource = dr;
             ddlType.DataTextField = "StockTypeName";

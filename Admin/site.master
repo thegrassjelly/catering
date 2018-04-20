@@ -108,6 +108,13 @@
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Users/View.aspx") %>"><i class="fa fa-list"></i>View Users</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a href="javascript:;"><i class="fa fa-truck fa-lg"></i><span>Suppliers</span></a>
+                    <ul class="acc-menu">
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Suppliers/Add.aspx") %>"><i class="fa fa-plus"></i>Add Supplier</a></li>
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Suppliers/View.aspx") %>"><i class="fa fa-list"></i>View Suppliers</a></li>
+                    </ul>
+                </li>
 
                 <li>
                     <a href="javascript:;"><i class="fa fa-boxes fa-lg"></i><span>Inventory</span></a>
