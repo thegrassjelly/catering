@@ -88,12 +88,12 @@
                 <li class="divider"></li>
                 <li><a href="<%= Page.ResolveUrl("~/Admin/Default.aspx") %>"><i class="fa fa-home fa-2x"></i><span>Dashboard</span></a></li>
                 <li class="divider"></li>
-                <li>
+<%--                <li>
                     <a href="javascript:;"><i class="fa fa-wrench fa-lg"></i><span>Administration</span></a>
                     <ul class="acc-menu">
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Administration/Pricelist.aspx") %>"><i class="fa fa-edit"></i>Edit Pricelist</a></li>
                     </ul>
-                </li>
+                </li>--%>
                 <li>
                     <a href="javascript:;"><i class="fa fa-calendar fa-lg"></i><span>Booking</span></a>
                     <ul class="acc-menu">
