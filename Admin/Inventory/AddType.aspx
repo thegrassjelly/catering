@@ -8,7 +8,7 @@
         <div class="col-lg-12">
             <div class="panel panel-midnightblue">
                 <div class="panel-heading">
-                    Membership Details
+                    Stock Type Details
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
