@@ -1,9 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/site.master" AutoEventWireup="true" CodeFile="Add.aspx.cs" Inherits="Admin_Cheques_Add" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/site.master" AutoEventWireup="true" CodeFile="UpdateCheque.aspx.cs" Inherits="Admin_Cheques_UpdateCheque" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-    <i class="fa fa-plus"></i>Add Cheque
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <i class="fa fa-edit"></i> Update Cheque
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
+<asp:Content ID="Content2" ContentPlaceHolderID="body" Runat="Server">
     <form class="form-horizontal" runat="server">
         <asp:ScriptManager runat="server" />
         <div class="col-lg-12">
@@ -79,7 +79,7 @@
                 <div class="panel-footer">
                     <div class="pull-right">
                         <asp:Button ID="btnBack" class="btn btn-primary" runat="server" Text="Back" OnClick="btnBack_OnClick" />
-                        <asp:Button ID="btnSubmit" class="btn btn-success" runat="server" Text="Submit" OnClick="btnSubmit_OnClick" />
+                        <asp:Button ID="btnUpdate" class="btn btn-success" runat="server" Text="Update" OnClick="btnUpdate_OnClick" />
                     </div>
                 </div>
             </div>
