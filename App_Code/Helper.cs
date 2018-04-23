@@ -16,6 +16,16 @@ public class Helper
 		//
 	}
 
+    public static string server = ConfigurationManager.AppSettings["server"].ToString();
+
+    public static string database = ConfigurationManager.AppSettings["database"].ToString();
+
+    public static string username = ConfigurationManager.AppSettings["username"].ToString();
+
+    public static string password = ConfigurationManager.AppSettings["password"].ToString();
+
+    public static string secured = ConfigurationManager.AppSettings["Secured"].ToString();
+
     public static DateTime PHTime()
     {
         var timeUtc = DateTime.UtcNow;
