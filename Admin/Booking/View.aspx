@@ -55,6 +55,7 @@
                                     <th>Payment Status</th>
                                     <th>Date Added</th>
                                     <th></th>
+                                    <th></th>
                                 </thead>
                                 <tbody>
                                     <asp:ListView ID="lvBooking" runat="server"
@@ -75,6 +76,8 @@
                                                 <td>
                                                     <a href='UpdateBooking.aspx?ID=<%# Eval("BookingID") %>'>
                                                         <asp:Label runat="server" ToolTip="Show Info"><i class="fa fa-search"></i></asp:Label></a>
+                                                </td>
+                                                <td>
                                                     <a href='BookingReport.aspx?ID=<%# Eval("BookingID") %>'>
                                                         <asp:Label runat="server" ToolTip="Booking Report"><i class="fa fa-print"></i></asp:Label></a>
                                                 </td>

@@ -254,7 +254,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
             cmd.Connection = con;
             cmd.CommandText = @"SELECT BookingDetailsID, EventDateTime, IngressTime, EatingTime,
                                 Theme, AdultGuest, KidGuest, Remarks,
-                                MainTable, EightSeater, MonoBlock, KiddieTables,
+                                MainTable, MainTableQty, EightSeater, MonoBlock, KiddieTables,
                                 BuffetTables, Utensils, RollTop, ChafingDish, Flowers,
                                 HeadWaiter, WaterIce, EightSeaterRound, Napkin, ChairCover,
                                 BuffetDir, BuffetSkir, BuffetCrump
@@ -280,6 +280,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
                 txtKidPax.Text = dr["KidGuest"].ToString();
                 txtRemarks.Text = dr["Remarks"].ToString();
                 ddlMainTable.SelectedValue = dr["MainTable"].ToString();
+                txtMainTableQty.Text = dr["MainTableQty"].ToString();
                 txtEightSeater.Text = dr["EightSeater"].ToString();
                 txtMonoblock.Text = dr["MonoBlock"].ToString();
                 txtKiddieTables.Text = dr["KiddieTables"].ToString();
@@ -489,7 +490,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
     {
         cmd.Parameters.Clear();
         cmd.CommandText = @"UPDATE BookingDetails SET
-                                MainTable = @mtable, EightSeater = @eightseat, MonoBlock = @monob,
+                                MainTable = @mtable, MainTableQty = @mtableqty, EightSeater = @eightseat, MonoBlock = @monob,
                                 KiddieTables = @ktables, BuffetTables = @btables, Utensils = @uten,
                                 RollTop = @rtop, ChafingDish = @cdish, Flowers = @flr, HeadWaiter = @hwaiter,
                                 WaterIce = @wice, EightSeaterRound = @eightsr, Napkin = @npkn, ChairCover = @ccover,
@@ -497,6 +498,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
                                 WHERE BookingDetailsID = @id";
         cmd.Parameters.AddWithValue("@id", _bdid);
         cmd.Parameters.AddWithValue("@mtable", ddlMainTable.SelectedValue);
+        cmd.Parameters.AddWithValue("@mtableqty", txtMainTableQty.Text);
         cmd.Parameters.AddWithValue("@eightseat", txtEightSeater.Text);
         cmd.Parameters.AddWithValue("@monob", txtMonoblock.Text);
         cmd.Parameters.AddWithValue("@ktables", txtKiddieTables.Text);

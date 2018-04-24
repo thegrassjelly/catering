@@ -259,6 +259,12 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-4">Qty</label>
+                                    <div class="col-lg-7">
+                                        <asp:TextBox ID="txtMainTableQty" class="form-control" TextMode="Number" runat="server" />
+                                    </div>
+                                </div>
                                 <div id="pnlHides2" runat="server">
                                     <div class="form-group">
                                         <label class="control-label col-lg-4">8 Seater Table</label>

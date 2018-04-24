@@ -576,17 +576,18 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
     {
         cmd.Parameters.Clear();
         cmd.CommandText = @"INSERT INTO BookingDetails
-                                (BookingID, MainTable, EightSeater, MonoBlock, KiddieTables, BuffetTables,
+                                (BookingID, MainTable, MainTableQty, EightSeater, MonoBlock, KiddieTables, BuffetTables,
                                 Utensils, RollTop, ChafingDish, Flowers, HeadWaiter, WaterIce,
                                 EightSeaterRound, Napkin, ChairCover, BuffetDir, BuffetSkir, BuffetCrump,
                                 UserID, DateAdded) 
                                 VALUES
-                                (@bid, @mtable, @eightseat, @monob, @ktables, @btables, @uten, @rtop, @cdish,
+                                (@bid, @mtable, @mtableqty, @eightseat, @monob, @ktables, @btables, @uten, @rtop, @cdish,
                                 @flr, @hwaiter, @wice, @eightsr, @npkn, @ccover, @bdir, @bskir, @bcrump,
                                 @uid, @dadded)
                                 SELECT TOP 1 BookingDetailsID FROM BookingDetails WHERE UserID = @uid ORDER BY BookingDetailsID DESC";
         cmd.Parameters.AddWithValue("@bid", bookingid);
         cmd.Parameters.AddWithValue("@mtable", ddlMainTable.SelectedValue);
+        cmd.Parameters.AddWithValue("@mtableqty", txtMainTableQty.Text);
         cmd.Parameters.AddWithValue("@eightseat", txtEightSeater.Text);
         cmd.Parameters.AddWithValue("@monob", txtMonoblock.Text);
         cmd.Parameters.AddWithValue("@ktables", txtKiddieTables.Text);
