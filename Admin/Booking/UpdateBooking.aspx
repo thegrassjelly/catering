@@ -260,7 +260,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-lg-4">Qty</label>
+                                    <label class="control-label col-lg-4">Quantity</label>
                                     <div class="col-lg-7">
                                         <asp:TextBox ID="txtMainTableQty" class="form-control" TextMode="Number" runat="server" />
                                     </div>
