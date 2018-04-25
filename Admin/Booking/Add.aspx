@@ -287,7 +287,7 @@
                             </div>
                             <div class="panel-footer">
                                 <center>
-                                    <asp:DataPager id="dpMenu" runat="server" pageSize="5" PagedControlID="lvMenu">
+                                    <asp:DataPager id="dpMenu" runat="server" pageSize="10" PagedControlID="lvMenu">
                                         <Fields>
                                             <asp:NumericPagerField Buttontype="Button"
                                                                    NumericButtonCssClass="btn btn-default"

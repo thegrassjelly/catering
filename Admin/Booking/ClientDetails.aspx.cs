@@ -14,72 +14,46 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         Helper.ValidateAdmin();
-    }
 
-    [WebMethod]
-    public static List<string> GetName(string prefixText)
-    {
-        List<string> name = new List<string>();
+        int clientid = 0;
+        bool validClient = int.TryParse(Request.QueryString["ID"], out clientid);
 
-        using (SqlConnection conn = new SqlConnection())
+        if (validClient)
         {
-            conn.ConnectionString = ConfigurationManager.ConnectionStrings["myCon"].ConnectionString;
-            using (SqlCommand cmd = new SqlCommand())
+            if (!IsPostBack)
             {
-                cmd.CommandText = @"SELECT ContactFirstName, ContactLastName, ClientID FROM Clients WHERE 
-                    ContactFirstName LIKE @SearchText OR
-                    ContactLastName LIKE @SearchText
-                    ORDER BY ContactLastName ASC";
-                cmd.Parameters.AddWithValue("@SearchText", "%" + prefixText + "%");
-                cmd.Connection = conn;
-                conn.Open();
-                using (SqlDataReader dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        string myString = dr["ContactLastName"] + ", " + dr["ContactFirstName"] + "/vn/" + dr["ClientID"];
-                        name.Add(myString);
-                    }
-                }
-
-                conn.Close();
+                GetClientDetails(clientid);
+                GetBooking(txtSearch.Text);
             }
-
         }
-        return name;
     }
 
-    protected void btnUser_Click(object sender, EventArgs e)
+    private void GetClientDetails(int clientid)
     {
-        if (hfName.Value != "0")
+        using (var con = new SqlConnection(Helper.GetCon()))
+        using (var cmd = new SqlCommand())
         {
-            using (var con = new SqlConnection(Helper.GetCon()))
-            using (var cmd = new SqlCommand())
-            {
-                con.Open();
-                cmd.Connection = con;
-                cmd.CommandText = @"SELECT ClientID, ContactFirstName, ContactLastName, 
+            con.Open();
+            cmd.Connection = con;
+            cmd.CommandText = @"SELECT ClientID, ContactFirstName, ContactLastName, 
                 EmailAddress, ContactNo, Address
                 FROM Clients WHERE ClientID = @id";
-                cmd.Parameters.AddWithValue("@id", hfName.Value);
-                using (var dr = cmd.ExecuteReader())
+            cmd.Parameters.AddWithValue("@id", clientid);
+            using (var dr = cmd.ExecuteReader())
+            {
+                if (dr.HasRows)
                 {
-                    if (dr.HasRows)
+                    if (dr.Read())
                     {
-                        if (dr.Read())
-                        {
-                            txtFN.Text = dr["ContactFirstName"].ToString();
-                            txtLN.Text = dr["ContactLastName"].ToString();
-                            txtEmail.Text = dr["EmailAddress"].ToString();
-                            txtAddr.Text = dr["Address"].ToString();
-                            txtMNo.Text = dr["ContactNo"].ToString();
-                        }
+                        txtFN.Text = dr["ContactFirstName"].ToString();
+                        txtLN.Text = dr["ContactLastName"].ToString();
+                        txtEmail.Text = dr["EmailAddress"].ToString();
+                        txtAddr.Text = dr["Address"].ToString();
+                        txtContactNo.Text = dr["ContactNo"].ToString();
                     }
                 }
             }
         }
-
-        GetBooking(txtSearch.Text);
     }
 
     private void GetBooking(string text)
@@ -161,7 +135,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@status", ddlPaymentStatus.SelectedValue);
             cmd.Parameters.AddWithValue("@bookingtype", ddlBookingType.SelectedValue);
             cmd.Parameters.AddWithValue("@keyword", "%" + text + "%");
-            cmd.Parameters.AddWithValue("@id", hfName.Value);
+            cmd.Parameters.AddWithValue("@id", Request.QueryString["ID"]);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             con.Close();
@@ -201,5 +175,33 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         GetBooking(txtSearch.Text);
+    }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("ViewClients.aspx");
+    }
+
+    protected void btnUpdate_Click(object sender, EventArgs e)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        using (SqlCommand cmd = new SqlCommand())
+        {
+            con.Open();
+            cmd.Connection = con;
+            cmd.CommandText = @"UPDATE Clients SET ContactFirstName = @fn,
+                        ContactLastName = @ln, Address = @addr,
+                        ContactNo = @contact, EmailAddress = @email
+                        WHERE ClientID = @id";
+            cmd.Parameters.AddWithValue("@id", Request.QueryString["ID"]);
+            cmd.Parameters.AddWithValue("@fn", txtFN.Text);
+            cmd.Parameters.AddWithValue("@ln", txtLN.Text);
+            cmd.Parameters.AddWithValue("@addr", txtAddr.Text);
+            cmd.Parameters.AddWithValue("@contact", txtContactNo.Text);
+            cmd.Parameters.AddWithValue("@email", txtEmail.Text);
+            cmd.ExecuteNonQuery();
+        }
+
+        Response.Redirect("ViewClients.aspx");
     }
 }
