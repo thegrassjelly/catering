@@ -111,6 +111,6 @@ public partial class Admin_Booking_SalesReport : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-
+        Response.Redirect("SalesReportPrint.aspx?datea=" + txtDateA.Text + "&&" + "dateb=" + txtDateB.Text);
     }
 }
