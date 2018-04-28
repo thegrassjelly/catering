@@ -9,16 +9,16 @@
     <form class=form-horizontal runat="server">
         <asp:ScriptManager runat="server" />
         <div class="row">
-            <div class="form-group">
-                <div class="col-lg-2">
-                    <asp:DropDownList ID="ddlReportType" class="form-control" runat="server"
-                        AutoPostBack="true" OnSelectedIndexChanged="ddlReportType_SelectedIndexChanged">
-                        <asp:ListItem>Default</asp:ListItem>
-                        <asp:ListItem>Stripped</asp:ListItem>
-                    </asp:DropDownList>
-                </div>
-            </div>
             <div class="col-lg-12">
+                <div class="form-group">
+                    <div class="col-lg-2">
+                        <asp:DropDownList ID="ddlReportType" class="form-control" runat="server"
+                            AutoPostBack="true" OnSelectedIndexChanged="ddlReportType_SelectedIndexChanged">
+                            <asp:ListItem>Default</asp:ListItem>
+                            <asp:ListItem>Stripped</asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
+                </div>
                 <CR:CrystalReportViewer ID="crvBookingReport" runat="server"
                     AutoDataBind="true" EnableDatabaseLogonPrompt="false"
                     ToolPanelView="None" />

@@ -10,6 +10,16 @@
         <asp:ScriptManager runat="server" />
         <div class="row">
             <div class="col-lg-12">
+            <div class="form-group">
+                <div class="col-lg-2">
+                    <asp:TextBox ID="txtDateA" class="form-control" TextMode="Date" runat="server"
+                        AutoPostBack="True" OnTextChanged="txtDateA_TextChanged" />
+                </div>
+                <div class="col-lg-2">
+                    <asp:TextBox ID="txtDateB" class="form-control" TextMode="Date"
+                        AutoPostBack="True" OnTextChanged="txtDateB_TextChanged" runat="server" />
+                </div>
+            </div>
                 <CR:CrystalReportViewer ID="crvSalesReport" runat="server"
                     AutoDataBind="true" EnableDatabaseLogonPrompt="false"
                     ToolPanelView="None" />

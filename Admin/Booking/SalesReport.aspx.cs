@@ -38,13 +38,13 @@ public partial class Admin_Booking_SalesReport : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status, Total,
+                                    MainTable, EventAddress, EventDateTime, Status, Total,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
                                     INNER JOIN BookingDetails ON Bookings.BookingID = BookingDetails.BookingID
                                     INNER JOIN Payments ON Bookings.BookingID = Payments.BookingID
-                                    WHERE Bookings.DateAdded BETWEEN @datea AND @dateb
+                                    WHERE Bookings.DateAdded BETWEEN @datea AND @dateb AND Status = 'Paid'
                                     ORDER BY Bookings.DateAdded ASC";
             cmd.Parameters.AddWithValue("@datea", txtDateA.Text);
             cmd.Parameters.AddWithValue("@dateb", txtDateB.Text);
@@ -68,7 +68,7 @@ public partial class Admin_Booking_SalesReport : System.Web.UI.Page
             cmd.Connection = con;
             cmd.CommandText = @"SELECT SUM(Total) AS Total FROM Payments
                                 INNER JOIN Bookings ON Payments.BookingID = Bookings.BookingID
-                                WHERE Bookings.DateAdded Between @datea AND @dateb";
+                                WHERE Bookings.DateAdded Between @datea AND @dateb AND Status = 'Paid'";
             cmd.Parameters.AddWithValue("@datea", txtDateA.Text);
             cmd.Parameters.AddWithValue("@dateb", txtDateB.Text);
             using (var dr = cmd.ExecuteReader())

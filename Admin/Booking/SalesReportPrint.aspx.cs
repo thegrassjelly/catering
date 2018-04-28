@@ -13,18 +13,18 @@ public partial class Admin_Booking_SalesReportPrint : System.Web.UI.Page
         if (Request.QueryString["datea"] != null && 
             Request.QueryString["dateb"] != null)
         {
-            string datea = Request.QueryString["datea"];
-            string dateb = Request.QueryString["dateb"];
-
             if (!IsPostBack)
             {
+                txtDateA.Text = Request.QueryString["datea"];
+                txtDateB.Text = Request.QueryString["dateb"];
+
                 GetName();
-                GetSalesReport(datea, dateb);
+                GetSalesReport();
             }
         }
     }
 
-    private void GetSalesReport(string datea, string dateb)
+    private void GetSalesReport()
     {
         ReportDocument report = new ReportDocument();
         report.Load(Server.MapPath("~/Admin/Booking/rptSalesReport.rpt"));
@@ -32,8 +32,8 @@ public partial class Admin_Booking_SalesReportPrint : System.Web.UI.Page
         report.DataSourceConnections[0].SetConnection(Helper.server, Helper.database, Helper.username, Helper.password);
 
         report.SetParameterValue("User", _name);
-        report.SetParameterValue("datea", datea);
-        report.SetParameterValue("dateb", dateb);
+        report.SetParameterValue("datea", txtDateA.Text);
+        report.SetParameterValue("dateb", txtDateB.Text);
         report.SetParameterValue("Logo", "~/Admin/assets/img/adminlogo.jpg");
 
         crvSalesReport.ReportSource = report;
@@ -58,5 +58,17 @@ public partial class Admin_Booking_SalesReportPrint : System.Web.UI.Page
                 }
             }
         }
+    }
+
+    protected void txtDateA_TextChanged(object sender, EventArgs e)
+    {
+        GetName();
+        GetSalesReport();
+    }
+
+    protected void txtDateB_TextChanged(object sender, EventArgs e)
+    {
+        GetName();
+        GetSalesReport();
     }
 }

@@ -32,7 +32,7 @@ public partial class Admin_Payments_View : System.Web.UI.Page
             if (ddlPaymentStatus.SelectedValue == "All Status")
             {
                 cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                Address, DownPayment, Balance, Total, Status,
+                                EventAddress, DownPayment, Balance, Total, Status,
                                 Payments.DateAdded
                                 FROM Payments
                                 INNER JOIN Bookings ON Payments.BookingID = Bookings.BookingID
@@ -40,12 +40,12 @@ public partial class Admin_Payments_View : System.Web.UI.Page
                                 WHERE 
                                 (ContactFirstName LIKE @keyword OR
                                 ContactLastName LIKE @keyword OR
-                                Address LIKE @keyword) ORDER BY DateAdded DESC";
+                                EventAddress LIKE @keyword) ORDER BY DateAdded DESC";
             }
             else
             {
                 cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                Address, DownPayment, Balance, Total, Status,
+                                EventAddress, DownPayment, Balance, Total, Status,
                                 Payments.DateAdded
                                 FROM Payments
                                 INNER JOIN Bookings ON Payments.BookingID = Bookings.BookingID
@@ -53,7 +53,7 @@ public partial class Admin_Payments_View : System.Web.UI.Page
                                 WHERE 
                                 (ContactFirstName LIKE @keyword OR
                                 ContactLastName LIKE @keyword OR
-                                Address LIKE @keyword) AND 
+                                EventAddress LIKE @keyword) AND 
                                 Payments.Status = @status ORDER BY DateAdded DESC";
             }
 

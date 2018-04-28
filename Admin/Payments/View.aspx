@@ -38,10 +38,10 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <th>Client Name</th>
-                                    <th>Address</th>
+                                    <th>Event Location</th>
+                                    <th>Total</th>
                                     <th>Down Payment</th>
                                     <th>Balance</th>
-                                    <th>Total</th>
                                     <th>Payment Status</th>
                                     <th>Date Added</th>
                                 </thead>
@@ -52,10 +52,10 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td><%# Eval("ContactFirstName") %> <%# Eval("ContactLastName") %> </td>
-                                                <td><%# Eval("Address") %></td>
+                                                <td><%# Eval("EventAddress") %></td>
+                                                <td>₱ <%# Eval("Total", "{0: #,###.00}") %></td>
                                                 <td>₱ <%# Eval("DownPayment", "{0: #,###.00}") %></td>
                                                 <td>₱ <%# Eval("Balance", "{0: #,###.00}") %></td>
-                                                <td>₱ <%# Eval("Total", "{0: #,###.00}") %></td>
                                                 <td>
                                                     <span class='<%# Eval("Status").ToString() == "Pending" ? "label label-danger" : "label label-success"%>'>
                                                         <%# Eval("Status") %>
