@@ -40,6 +40,22 @@ public partial class Admin_Booking_BookingReport : System.Web.UI.Page
         crvBookingReport.DataBind();
     }
 
+    private void GetBookingReport2(int bookingid)
+    {
+        ReportDocument report = new ReportDocument();
+        report.Load(Server.MapPath("~/Admin/Booking/rptBooking2.rpt"));
+
+        report.DataSourceConnections[0].SetConnection(Helper.server, Helper.database, Helper.username, Helper.password);
+
+        report.SetParameterValue("User", _name);
+        report.SetParameterValue("BookingID", bookingid);
+        report.SetParameterValue("BookingDetailsID", _bdid);
+        report.SetParameterValue("Logo", "~/Admin/assets/img/adminlogo.jpg");
+
+        crvBookingReport.ReportSource = report;
+        crvBookingReport.DataBind();
+    }
+
     private void GetBookingDetailsID(int bookingid)
     {
         using (var con = new SqlConnection(Helper.GetCon()))
@@ -77,6 +93,18 @@ public partial class Admin_Booking_BookingReport : System.Web.UI.Page
                     _name = dr["FirstName"] + " " + dr["LastName"];
                 }
             }
+        }
+    }
+
+    protected void ddlReportType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlReportType.SelectedValue == "Stripped")
+        {
+            GetBookingReport2(int.Parse(Request.QueryString["ID"]));
+        }
+        else
+        {
+            GetBookingReport(int.Parse(Request.QueryString["ID"]));
         }
     }
 }

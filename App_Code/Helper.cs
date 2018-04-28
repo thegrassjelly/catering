@@ -16,6 +16,8 @@ public class Helper
 		//
 	}
 
+    public static string vat = ConfigurationManager.AppSettings["vat"].ToString();
+
     public static string server = ConfigurationManager.AppSettings["server"].ToString();
 
     public static string database = ConfigurationManager.AppSettings["database"].ToString();

@@ -29,11 +29,10 @@ public partial class Admin_Booking_ViewClients : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
                 cmd.CommandText = @"SELECT ClientID, ContactFirstName, ContactLastName, ContactNo,
-                            Address, EmailAddress, DateAdded
+                            EmailAddress, DateAdded
                             FROM Clients
                             WHERE (ContactFirstName LIKE @keyword OR 
-                            ContactLastName LIKE @keyword OR 
-                            Address LIKE @keyword) 
+                            ContactLastName LIKE @keyword) 
                             ORDER BY DateAdded DESC";
             cmd.Parameters.AddWithValue("@keyword", "%" + text + "%");
             SqlDataAdapter da = new SqlDataAdapter(cmd);

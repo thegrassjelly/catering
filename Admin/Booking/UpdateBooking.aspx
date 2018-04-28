@@ -97,13 +97,6 @@
                                         TextMode="Number" disabled />
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-lg-3">Address</label>
-                                <div class="col-lg-7">
-                                    <asp:TextBox ID="txtAddr" class="form-control" runat="server"
-                                        TextMode="Multiline" Style="max-width: 100%;" disabled />
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="panel panel-midnightblue">
@@ -216,6 +209,13 @@
                                         <div class="col-lg-7">
                                             <asp:TextBox ID="txtEatingTime" class="form-control"
                                                 TextMode="Time" runat="server" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Event Location</label>
+                                        <div class="col-lg-7">
+                                            <asp:TextBox ID="txtAddr" class="form-control" runat="server"
+                                                TextMode="Multiline" Style="max-width: 100%;" />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -544,7 +544,9 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">₱</span>
                                                 <asp:TextBox ID="txtBasicFee" class="form-control" runat="server"
-                                                    TextMode="number" />
+                                                    Text="0" TextMode="number"
+                                                    AutoPostBack="true"
+                                                    OnTextChanged="txtBasicFee_TextChanged" />
                                             </div>
                                         </div>
                                     </div>
@@ -554,8 +556,16 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">₱</span>
                                                 <asp:TextBox ID="txtMiscFee" class="form-control" runat="server"
-                                                    TextMode="number" />
+                                                    Text="0" TextMode="number"
+                                                    AutoPostBack="true"
+                                                    OnTextChanged="txtMiscFee_TextChanged" />
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Fee Description</label>
+                                        <div class="col-lg-8">
+                                            <asp:TextBox ID="txtMiscFeeDesc" class="form-control" runat="server" />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -564,7 +574,9 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">₱</span>
                                                 <asp:TextBox ID="txtOtherFee" class="form-control" runat="server"
-                                                    TextMode="number" />
+                                                    Text="0" TextMode="number"
+                                                    AutoPostBack="true"
+                                                    OnTextChanged="txtOtherFee_TextChanged" />
                                             </div>
                                         </div>
                                     </div>
@@ -576,7 +588,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">₱</span>
                                                 <asp:TextBox ID="txtTotal" class="form-control" runat="server"
-                                                    TextMode="number" />
+                                                    TextMode="number" disabled />
                                             </div>
                                         </div>
                                     </div>
@@ -586,8 +598,16 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">₱</span>
                                                 <asp:TextBox ID="txtDP" class="form-control" runat="server"
-                                                    TextMode="number" />
+                                                    Text="0" TextMode="number"
+                                                    AutoPostBack="true"
+                                                    OnTextChanged="txtDP_TextChanged" />
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Payment Method</label>
+                                        <div class="col-lg-8">
+                                            <asp:TextBox ID="txtPayMethod" class="form-control" runat="server" />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -596,15 +616,25 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">₱</span>
                                                 <asp:TextBox ID="txtBalance" class="form-control" runat="server"
-                                                    TextMode="number" />
+                                                    TextMode="number" disabled />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <div class="pull-right">
-                                        <asp:Button ID="btnUpdate" runat="server" Visible="true" class="btn btn-success pull-right" Text="Update Booking"
-                                            OnClientClick='return confirm("Are you sure?");' OnClick="btnUpdate_OnClick" />
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2">VAT</label>
+                                        <div class="col-lg-3">
+                                            <asp:DropDownList ID="ddlVat" class="form-control"
+                                                AutoPostBack="true" OnSelectedIndexChanged="ddlVat_SelectedIndexChanged" runat="server">
+                                                <asp:ListItem>Yes</asp:ListItem>
+                                                <asp:ListItem>No</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="pull-right">
+                                            <asp:Button ID="btnUpdate" runat="server" Visible="true" class="btn btn-success pull-right" Text="Update Booking"
+                                                OnClientClick='return confirm("Are you sure?");' OnClick="btnUpdate_OnClick" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

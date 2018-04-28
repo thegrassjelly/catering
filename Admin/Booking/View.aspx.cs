@@ -30,7 +30,7 @@ public partial class Admin_Booking_View : System.Web.UI.Page
                 if (ddlPaymentStatus.SelectedValue == "All Status")
                 {
                     cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status,
+                                    MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
@@ -39,12 +39,12 @@ public partial class Admin_Booking_View : System.Web.UI.Page
                                     WHERE
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
-                                    Address LIKE @keyword) ORDER BY Bookings.DateAdded DESC";
+                                    EventAddress LIKE @keyword) ORDER BY Bookings.DateAdded DESC";
                 }
                 else
                 {
                     cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status,
+                                    MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
@@ -53,7 +53,7 @@ public partial class Admin_Booking_View : System.Web.UI.Page
                                     WHERE
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
-                                    Address LIKE @keyword) AND 
+                                    EventAddress LIKE @keyword) AND 
                                     Status = @status ORDER BY Bookings.DateAdded DESC";
                 }
 
@@ -63,7 +63,7 @@ public partial class Admin_Booking_View : System.Web.UI.Page
                 if (ddlPaymentStatus.SelectedValue == "All Status")
                 {
                     cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status,
+                                    MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
@@ -72,13 +72,13 @@ public partial class Admin_Booking_View : System.Web.UI.Page
                                     WHERE
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
-                                    Address LIKE @keyword) AND MainTable = @bookingtype
+                                    EventAddress LIKE @keyword) AND MainTable = @bookingtype
                                     ORDER BY Bookings.DateAdded DESC";
                 }
                 else
                 {
                     cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status,
+                                    MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
@@ -87,7 +87,7 @@ public partial class Admin_Booking_View : System.Web.UI.Page
                                     WHERE
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
-                                    Address LIKE @keyword) AND 
+                                    EventAddress LIKE @keyword) AND 
                                     Status = @status AND MainTable = @bookingtype
                                     ORDER BY Bookings.DateAdded DESC";
                 }

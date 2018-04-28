@@ -28,7 +28,6 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <th>Client Name</th>
-                                    <th>Address</th>
                                     <th>Contact No.</th>
                                     <th>Email Address</th>
                                     <th>Date Added</th>
@@ -41,7 +40,6 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td><%# Eval("ContactFirstName") %>, <%# Eval("ContactLastName") %> </td>
-                                                <td><%# Eval("Address") %></td>
                                                 <td><%# Eval("ContactNo") %></td>
                                                 <td><%# Eval("EmailAddress") %></td>
                                                 <td><%# Eval("DateAdded", "{0: dddd, MMMM d, yyyy}") %></td>

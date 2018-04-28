@@ -49,7 +49,7 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <th>Client Name</th>
-                                    <th>Address</th>
+                                    <th>Event Location</th>
                                     <th>Booking Type</th>
                                     <th>Event Date & Time</th>
                                     <th>Payment Status</th>
@@ -64,7 +64,7 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td><%# Eval("ContactFirstName") %> <%# Eval("ContactLastName") %> </td>
-                                                <td><%# Eval("Address") %></td>
+                                                <td><%# Eval("EventAddress") %></td>
                                                 <td><%# Eval("MainTable") %></td>
                                                 <td><%# Eval("EventDateTime", "{0: dddd, MMMM d, yyyy hh:mm tt}") %></td>
                                                 <td>

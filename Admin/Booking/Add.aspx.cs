@@ -178,7 +178,7 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
                 con.Open();
                 cmd.Connection = con;
                 cmd.CommandText = @"SELECT ClientID, ContactFirstName, ContactLastName, 
-                EmailAddress, ContactNo, Address
+                EmailAddress, ContactNo
                 FROM Clients WHERE ClientID = @id";
                 cmd.Parameters.AddWithValue("@id", hfName.Value);
                 using (var dr = cmd.ExecuteReader())
@@ -190,7 +190,6 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
                             txtFN.Text = dr["ContactFirstName"].ToString();
                             txtLN.Text = dr["ContactLastName"].ToString();
                             txtEmail.Text = dr["EmailAddress"].ToString();
-                            txtAddr.Text = dr["Address"].ToString();
                             txtMNo.Text = dr["ContactNo"].ToString();
                         }
                     }
@@ -213,13 +212,12 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"INSERT INTO Clients
-                            (ContactFirstName, ContactLastName, ContactNo, Address,
+                            (ContactFirstName, ContactLastName, ContactNo,
                             EmailAddress, DateAdded) VALUES
-                            (@fn, @ln, @conct, @addr, @eadd, @dadded)";
+                            (@fn, @ln, @conct, @eadd, @dadded)";
             cmd.Parameters.AddWithValue("@fn", txtNewFN.Text);
             cmd.Parameters.AddWithValue("@ln", txtNewLN.Text);
             cmd.Parameters.AddWithValue("@conct", txtNewMob.Text);
-            cmd.Parameters.AddWithValue("@addr", txtNewAddr.Text);
             cmd.Parameters.AddWithValue("@eadd", txtNewEmail.Text);
             cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
             cmd.ExecuteNonQuery();
@@ -410,10 +408,10 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"INSERT INTO Bookings
-                                    (EventDateTime, IngressTime, EatingTime,
+                                    (EventDateTime, IngressTime, EatingTime, EventAddress,
                                     Theme, AdultGuest, KidGuest, ClientID, Remarks, UserID, DateAdded)
                                     VALUES
-                                    (@edate, @itime, @eattime, @theme, @aguest, @kguest,
+                                    (@edate, @itime, @eattime, @eaddr, @theme, @aguest, @kguest,
                                     @cid, @rmrks, @uid, @dadded); 
                                     SELECT TOP 1 BookingID FROM Bookings WHERE UserID = @uid ORDER BY BookingID DESC";
             cmd.Parameters.AddWithValue("@edate", Convert.ToDateTime(txtEventDT.Text));
@@ -428,6 +426,7 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
                     ? Convert.ToDateTime(txtEventDT.Text)
                     : Convert.ToDateTime(txtEatingTime.Text));
 
+            cmd.Parameters.AddWithValue("@eaddr", txtAddr.Text);
             cmd.Parameters.AddWithValue("@theme", txtTheme.Text);
             cmd.Parameters.AddWithValue("@aguest", txtAdultPax.Text);
             cmd.Parameters.AddWithValue("@kguest", txtKidPax.Text);
@@ -496,15 +495,18 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
     {
         cmd.Parameters.Clear();
         cmd.CommandText = @"INSERT INTO Payments
-                                (BasicFee, MiscFee, OtherFee, DownPayment, Balance, Total, Status, BookingID, DateAdded)
+                                (BasicFee, MiscFee, MiscDesc, OtherFee, DownPayment, PaymentMethod, Balance, Total, VAT, Status, BookingID, DateAdded)
                                 VALUES
-                                (@bfee, @mfee, @ofee, @dp, @blnce, @total, @status, @bid, @dadded)";
+                                (@bfee, @mfee, @miscdesc, @ofee, @dp, @paymeth, @blnce, @total, @vat, @status, @bid, @dadded)";
         cmd.Parameters.AddWithValue("@bfee", txtBasicFee.Text);
         cmd.Parameters.AddWithValue("@mfee", txtMiscFee.Text);
+        cmd.Parameters.AddWithValue("@miscdesc", txtMiscFeeDesc.Text);
         cmd.Parameters.AddWithValue("@ofee", txtOtherFee.Text);
         cmd.Parameters.AddWithValue("@dp", txtDP.Text);
+        cmd.Parameters.AddWithValue("@paymeth", txtPayMethod.Text);
         cmd.Parameters.AddWithValue("@blnce", txtBalance.Text);
         cmd.Parameters.AddWithValue("@total", txtTotal.Text);
+        cmd.Parameters.AddWithValue("@vat", ddlVat.SelectedValue);
         cmd.Parameters.AddWithValue("@status", "Pending");
         cmd.Parameters.AddWithValue("@bid", bookingid);
         cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
@@ -626,5 +628,67 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
             pnlHides3.Visible = true;
             pnlHides4.Visible = true;
         }
+    }
+
+    protected void ddlVat_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ComputeTotal();
+    }
+
+    protected void txtBasicFee_TextChanged(object sender, EventArgs e)
+    {
+        ComputeTotal();
+    }
+
+    protected void txtMiscFee_TextChanged(object sender, EventArgs e)
+    {
+        ComputeTotal();
+    }
+
+    protected void txtOtherFee_TextChanged(object sender, EventArgs e)
+    {
+        ComputeTotal();
+    }
+
+    protected void txtDP_TextChanged(object sender, EventArgs e)
+    {
+        ComputeBalance();
+    }
+
+    private void ComputeTotal()
+    {
+        decimal bcharges,
+            mfee,
+            ocharges,
+            total;
+
+        decimal vat = (decimal.Parse(Helper.vat) / 100) + 1;
+
+        decimal.TryParse(txtBasicFee.Text, out bcharges);
+        decimal.TryParse(txtMiscFee.Text, out mfee);
+        decimal.TryParse(txtOtherFee.Text, out ocharges);
+
+
+        if (ddlVat.SelectedValue == "Yes")
+        {
+
+            total = (bcharges + mfee + ocharges) * vat;
+        }
+        else
+        {
+            total = bcharges + mfee + ocharges;
+        }
+
+        txtTotal.Text = total.ToString("##.00");
+    }
+
+    private void ComputeBalance()
+    {
+        decimal total, dp;
+
+        decimal.TryParse(txtTotal.Text, out total);
+        decimal.TryParse(txtDP.Text, out dp);
+
+        txtBalance.Text = (total - dp).ToString("##.00");
     }
 }

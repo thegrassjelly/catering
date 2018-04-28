@@ -224,8 +224,8 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"SELECT BasicFee, MiscFee, OtherFee, DownPayment,
-                                Balance, Total, Status
+            cmd.CommandText = @"SELECT BasicFee, MiscFee, MiscDesc, OtherFee, DownPayment,
+                                PaymentMethod, Balance, Total, VAT, Status
                                 FROM Payments
                                 WHERE BookingID = @id";
             cmd.Parameters.AddWithValue("@id", bookingId);
@@ -236,10 +236,13 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
 
                 txtBasicFee.Text = dr["BasicFee"].ToString();
                 txtMiscFee.Text = dr["MiscFee"].ToString();
+                txtMiscFeeDesc.Text = dr["MiscDesc"].ToString();
                 txtOtherFee.Text = dr["OtherFee"].ToString();
                 txtDP.Text = dr["DownPayment"].ToString();
+                txtPayMethod.Text = dr["PaymentMethod"].ToString();
                 txtBalance.Text = dr["Balance"].ToString();
                 txtTotal.Text = dr["Total"].ToString();
+                ddlVat.SelectedValue = dr["VAT"].ToString();
                 ddlStatus.SelectedValue = dr["Status"].ToString();
             }
         }
@@ -253,7 +256,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"SELECT BookingDetailsID, EventDateTime, IngressTime, EatingTime,
-                                Theme, AdultGuest, KidGuest, Remarks,
+                                EventAddress, Theme, AdultGuest, KidGuest, Remarks,
                                 MainTable, MainTableQty, EightSeater, MonoBlock, KiddieTables,
                                 BuffetTables, Utensils, RollTop, ChafingDish, Flowers,
                                 HeadWaiter, WaterIce, EightSeaterRound, Napkin, ChairCover,
@@ -275,6 +278,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
                 txtEventDT.Text = edt.ToString("yyyy-MM-ddTHH:mm");
                 txtIngressTime.Text = it.ToString("HH:mm");
                 txtEatingTime.Text = et.ToString("HH:mm");
+                txtAddr.Text = dr["EventAddress"].ToString();
                 txtTheme.Text = dr["Theme"].ToString();
                 txtAdultPax.Text = dr["AdultGuest"].ToString();
                 txtKidPax.Text = dr["KidGuest"].ToString();
@@ -310,7 +314,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                ContactNo, EmailAddress, Address
+                ContactNo, EmailAddress
                 FROM Bookings
                 INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
                 WHERE BookingID = @id";
@@ -323,7 +327,6 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
                 txtLN.Text = dr["ContactLastName"].ToString();
                 txtEmail.Text = dr["EmailAddress"].ToString();
                 txtMNo.Text = dr["ContactNo"].ToString();
-                txtAddr.Text = dr["Address"].ToString();
             }
         }
     }
@@ -359,7 +362,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
             cmd.Connection = con;
             cmd.CommandText = @"UPDATE Bookings SET
                                 EventDateTime = @edt, IngressTime = @itime, EatingTime = @eattime,
-                                Theme = @theme, AdultGuest = @aguest, KidGuest = @kguest,
+                                EventAddress = @eaddr, Theme = @theme, AdultGuest = @aguest, KidGuest = @kguest,
                                 Remarks = @rmks WHERE BookingID = @id";
             cmd.Parameters.AddWithValue("@id", Request.QueryString["ID"]);
             cmd.Parameters.AddWithValue("@edt", Convert.ToDateTime(txtEventDT.Text));
@@ -374,6 +377,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
                     ? Convert.ToDateTime(txtEventDT.Text)
                     : Convert.ToDateTime(txtEatingTime.Text));
 
+            cmd.Parameters.AddWithValue("@eaddr", txtAddr.Text);
             cmd.Parameters.AddWithValue("@theme", txtTheme.Text);
             cmd.Parameters.AddWithValue("@aguest", txtAdultPax.Text);
             cmd.Parameters.AddWithValue("@kguest", txtKidPax.Text);
@@ -471,17 +475,21 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
         cmd.Parameters.Clear();
         cmd.CommandText = @"UPDATE Payments SET
                                     BasicFee = @bfee, MiscFee = @mfee,
+                                    MiscDesc = @mdesc, PaymentMethod = @paymeth,
                                     OtherFee = @ofee, DownPayment = @dp,
-                                    Balance = @blnce, Total = @total,
+                                    Balance = @blnce, Total = @total, VAT = @vat,
                                     Status = @status
                                     WHERE BookingID = @id";
         cmd.Parameters.AddWithValue("@id", Request.QueryString["ID"]);
         cmd.Parameters.AddWithValue("@bfee", txtBasicFee.Text);
         cmd.Parameters.AddWithValue("@mfee", txtMiscFee.Text);
+        cmd.Parameters.AddWithValue("@mdesc", txtMiscFeeDesc.Text);
+        cmd.Parameters.AddWithValue("@paymeth", txtPayMethod.Text);
         cmd.Parameters.AddWithValue("@ofee", txtOtherFee.Text);
         cmd.Parameters.AddWithValue("@dp", txtDP.Text);
         cmd.Parameters.AddWithValue("@blnce", txtBalance.Text);
         cmd.Parameters.AddWithValue("@total", txtTotal.Text);
+        cmd.Parameters.AddWithValue("@vat", ddlVat.SelectedValue);
         cmd.Parameters.AddWithValue("@status", ddlStatus.SelectedValue);
         cmd.ExecuteNonQuery();
     }
@@ -650,5 +658,67 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
         }
 
         GetMenu(_bdid);
+    }
+
+    protected void txtBasicFee_TextChanged(object sender, EventArgs e)
+    {
+        ComputeTotal();
+    }
+
+    protected void txtMiscFee_TextChanged(object sender, EventArgs e)
+    {
+        ComputeTotal();
+    }
+
+    protected void txtOtherFee_TextChanged(object sender, EventArgs e)
+    {
+        ComputeTotal();
+    }
+
+    protected void txtDP_TextChanged(object sender, EventArgs e)
+    {
+        ComputeBalance();
+    }
+
+    protected void ddlVat_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ComputeTotal();
+    }
+
+    private void ComputeTotal()
+    {
+        decimal bcharges,
+            mfee,
+            ocharges,
+            total;
+
+        decimal vat = (decimal.Parse(Helper.vat) / 100) + 1;
+
+        decimal.TryParse(txtBasicFee.Text, out bcharges);
+        decimal.TryParse(txtMiscFee.Text, out mfee);
+        decimal.TryParse(txtOtherFee.Text, out ocharges);
+
+
+        if (ddlVat.SelectedValue == "Yes")
+        {
+
+            total = (bcharges + mfee + ocharges) * vat;
+        }
+        else
+        {
+            total = bcharges + mfee + ocharges;
+        }
+
+        txtTotal.Text = total.ToString("##.00");
+    }
+
+    private void ComputeBalance()
+    {
+        decimal total, dp;
+
+        decimal.TryParse(txtTotal.Text, out total);
+        decimal.TryParse(txtDP.Text, out dp);
+
+        txtBalance.Text = (total - dp).ToString("##.00");
     }
 }
