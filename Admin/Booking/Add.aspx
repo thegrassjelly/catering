@@ -361,6 +361,7 @@
                                                 <asp:ListItem>10 Seater Round</asp:ListItem>
                                                 <asp:ListItem>Cocktail Table</asp:ListItem>
                                                 <asp:ListItem>Party Tray</asp:ListItem>
+                                                <asp:ListItem>Buffet</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>
                                     </div>

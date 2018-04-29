@@ -68,6 +68,7 @@
                                             <asp:ListItem Text="10 Seater Round" Value="10 Seater Round" />
                                             <asp:ListItem Text="Cocktail Table" Value="Cocktail Table" />
                                             <asp:ListItem Text="Party Tray" Value="Party Tray" />
+                                            <asp:ListItem Text="Buffet" Value="Buffet" />
                                         </asp:DropDownList>
                                     </div>
                                 </div>

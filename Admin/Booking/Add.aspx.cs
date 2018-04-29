@@ -633,25 +633,30 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
     protected void ddlVat_SelectedIndexChanged(object sender, EventArgs e)
     {
         ComputeTotal();
+        ComputeBalance();
     }
 
     protected void txtBasicFee_TextChanged(object sender, EventArgs e)
     {
         ComputeTotal();
+        ComputeBalance();
     }
 
     protected void txtMiscFee_TextChanged(object sender, EventArgs e)
     {
         ComputeTotal();
+        ComputeBalance();
     }
 
     protected void txtOtherFee_TextChanged(object sender, EventArgs e)
     {
         ComputeTotal();
+        ComputeBalance();
     }
 
     protected void txtDP_TextChanged(object sender, EventArgs e)
     {
+        ComputeTotal();
         ComputeBalance();
     }
 
