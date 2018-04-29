@@ -83,6 +83,64 @@
                     </div>
                 </div>
             </div>
+            <div class="panel panel-midnightblue">
+                <div class="panel-heading">
+                    Invoices
+                </div>
+                <div class="panel-body">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <th>Invoice #</th>
+                                    <th>Invoice Date</th>
+                                    <th>Amount</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Date Added</th>
+                                </thead>
+                                <tbody>
+                                    <asp:ListView ID="lvInvoice" runat="server"
+                                        OnPagePropertiesChanging="lvInvoice_PagePropertiesChanging"
+                                        OnDataBound="lvInvoice_DataBound">
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td><%# Eval("InvoiceNumber") %></td>
+                                                <asp:Literal ID="ltInvoiceID" runat="server" Text='<%# Eval("InvoiceID") %>' Visible="false" />
+                                                <td><%# Eval("InvoiceDate", "{0: MMMM d, yyyy}") %></td>
+                                                <td>₱ <%# Eval("Amount", "{0: #,###.00}") %></td>
+                                                <td><%# Eval("Description") %></td>
+                                                <td>
+                                                    <span class='<%# Eval("Status").ToString() == "Inactive" ? "label label-danger" : "label label-success"%>'>
+                                                        <%# Eval("Status") %>
+                                                    </span>
+                                                </td>
+                                                <td><%# Eval("DateAdded", "{0: MMMM d, yyyy}") %></td>
+                                            </tr>
+                                        </ItemTemplate>
+                                        <EmptyDataTemplate>
+                                            <tr>
+                                                <td colspan="12">
+                                                    <h2 class="text-center">No records found.</h2>
+                                                </td>
+                                            </tr>
+                                        </EmptyDataTemplate>
+                                    </asp:ListView>
+                                </tbody>
+                            </table>
+                </div>
+                <div class="panel-footer">
+                            <center>
+                                                <asp:DataPager id="dpInvoice" runat="server" pageSize="5" PagedControlID="lvInvoice">
+                                                    <Fields>
+                                                        <asp:NumericPagerField Buttontype="Button"
+                                                                               NumericButtonCssClass="btn btn-default"
+                                                                               CurrentPageLabelCssClass="btn btn-success"
+                                                                               NextPreviousButtonCssClass ="btn btn-default" 
+                                                                               ButtonCount="10" />
+                                                    </Fields>
+                                                </asp:DataPager>
+                                            </center>
+                </div>
+            </div>
         </div>
     </form>
 </asp:Content>

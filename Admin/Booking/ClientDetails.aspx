@@ -27,13 +27,6 @@
                                         <asp:TextBox ID="txtLN" class="form-control" runat="server" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-lg-3">Address</label>
-                                    <div class="col-lg-7">
-                                        <asp:TextBox ID="txtAddr" class="form-control" runat="server"
-                                            TextMode="Multiline" Style="max-width: 100%;" />
-                                    </div>
-                                </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
@@ -103,7 +96,7 @@
                             </div>
                             <table class="table table-striped table-hover">
                                 <thead>
-                                    <th>Address</th>
+                                    <th>Event Location</th>
                                     <th>Booking Type</th>
                                     <th>Event Date & Time</th>
                                     <th>Payment Status</th>
@@ -117,7 +110,7 @@
                                         OnDataBound="lvBooking_DataBound">
                                         <ItemTemplate>
                                             <tr>
-                                                <td><%# Eval("Address") %></td>
+                                                <td><%# Eval("EventAddress") %></td>
                                                 <td><%# Eval("MainTable") %></td>
                                                 <td><%# Eval("EventDateTime", "{0: dddd, MMMM d, yyyy hh:mm tt}") %></td>
                                                 <td>

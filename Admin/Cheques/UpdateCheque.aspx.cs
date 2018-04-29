@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -22,6 +23,7 @@ public partial class Admin_Cheques_UpdateCheque : System.Web.UI.Page
                 GetAccounts();
                 GetChequeDetails(chequeid);
                 GetAccountDetails();
+                GetInvoice();
             }
         }
     }
@@ -122,5 +124,36 @@ public partial class Admin_Cheques_UpdateCheque : System.Web.UI.Page
                 txtBranch.Text = dr["Branch"].ToString();
             }
         }
+    }
+
+    private void GetInvoice()
+    {
+        using (var con = new SqlConnection(Helper.GetCon()))
+        using (var cmd = new SqlCommand())
+        {
+            con.Open();
+            cmd.Connection = con;
+            cmd.CommandText = @"SELECT InvoiceID, InvoiceNumber, Description,
+                                InvoiceDate, Amount, Status, DateAdded
+                                FROM Invoice WHERE CheckID = @cid";
+            cmd.Parameters.AddWithValue("@cid", Request.QueryString["ID"]);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            con.Close();
+            da.Fill(ds, "Invoice");
+            lvInvoice.DataSource = ds;
+            lvInvoice.DataBind();
+        }
+    }
+
+    protected void lvInvoice_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+    {
+        dpInvoice.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+        GetInvoice();
+    }
+
+    protected void lvInvoice_DataBound(object sender, EventArgs e)
+    {
+        dpInvoice.Visible = dpInvoice.PageSize < dpInvoice.TotalRowCount;
     }
 }

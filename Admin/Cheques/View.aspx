@@ -20,12 +20,24 @@
                                     <asp:TextBox ID="txtDateB" class="form-control" TextMode="Date"
                                                  AutoPostback="True" OnTextChanged="txtDateB_OnTextChanged" runat="server" />
                                 </div>
+                                <div class="col-lg-8">
+                                    <div class="input-group">
+                                        <asp:TextBox ID="txtSearch" runat="server" class="form-control autosuggest"
+                                            placeholder="Keyword..." OnTextChanged="txtSearch_TextChanged" AutoPostBack="true" />
+                                        <span class="input-group-btn">
+                                            <asp:LinkButton ID="btnSearch" runat="server" class="btn btn-info"
+                                                OnClick="btnSearch_Click">
+                                      <i class="fa fa-search"></i>
+                                            </asp:LinkButton>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                             <table class="table table-striped table-hover">
                                 <thead>
+                                    <th>Supplier Name</th>
                                     <th>Account Name</th>
                                     <th>Account #</th>
-                                    <th>Payable To</th>
                                     <th>Check #</th>
                                     <th>Amount</th>
                                     <th>Check Date</th>
@@ -37,9 +49,9 @@
                                         OnDataBound="lvCheques_OnDataBound">
                                         <ItemTemplate>
                                             <tr>
+                                                <td><%# Eval("PayableTo") %></td>
                                                 <td><%# Eval("AccountName") %></td>
                                                 <td><%# Eval("AccountNo") %></td>
-                                                <td><%# Eval("PayableTo") %></td>
                                                 <td><%# Eval("CheckNo") %></td>
                                                 <td>₱ <%# Eval("CheckAmount", "{0: #,###.00}") %></td>
                                                 <td><%# Eval("CheckDate", "{0: dddd, MMMM d, yyyy}") %></td>

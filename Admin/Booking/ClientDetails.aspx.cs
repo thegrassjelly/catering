@@ -36,7 +36,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"SELECT ClientID, ContactFirstName, ContactLastName, 
-                EmailAddress, ContactNo, Address
+                EmailAddress, ContactNo
                 FROM Clients WHERE ClientID = @id";
             cmd.Parameters.AddWithValue("@id", clientid);
             using (var dr = cmd.ExecuteReader())
@@ -48,7 +48,6 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                         txtFN.Text = dr["ContactFirstName"].ToString();
                         txtLN.Text = dr["ContactLastName"].ToString();
                         txtEmail.Text = dr["EmailAddress"].ToString();
-                        txtAddr.Text = dr["Address"].ToString();
                         txtContactNo.Text = dr["ContactNo"].ToString();
                     }
                 }
@@ -69,7 +68,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                 if (ddlPaymentStatus.SelectedValue == "All Status")
                 {
                     cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status,
+                                    MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
@@ -78,12 +77,12 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                                     WHERE
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
-                                    Address LIKE @keyword) AND Clients.ClientID = @id ORDER BY Bookings.DateAdded DESC";
+                                    EventAddress LIKE @keyword) AND Clients.ClientID = @id ORDER BY Bookings.DateAdded DESC";
                 }
                 else
                 {
                     cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status,
+                                    MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
@@ -92,7 +91,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                                     WHERE
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
-                                    Address LIKE @keyword) AND Clients.ClientID = @id AND
+                                    EventAddress LIKE @keyword) AND Clients.ClientID = @id AND
                                     Status = @status ORDER BY Bookings.DateAdded DESC";
                 }
 
@@ -102,7 +101,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                 if (ddlPaymentStatus.SelectedValue == "All Status")
                 {
                     cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status,
+                                    MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
@@ -111,13 +110,13 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                                     WHERE
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
-                                    Address LIKE @keyword) AND MainTable = @bookingtype AND Clients.ClientID = @id
+                                    EventAddress LIKE @keyword) AND MainTable = @bookingtype AND Clients.ClientID = @id
                                     ORDER BY Bookings.DateAdded DESC";
                 }
                 else
                 {
                     cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
-                                    MainTable, Address, EventDateTime, Status,
+                                    MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
                                     INNER JOIN Clients ON Bookings.ClientID = Clients.ClientID
@@ -126,7 +125,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                                     WHERE
                                     (ContactFirstName LIKE @keyword OR
                                     ContactLastName LIKE @keyword OR
-                                    Address LIKE @keyword) AND Clients.ClientID = @id AND
+                                    EventAddress LIKE @keyword) AND Clients.ClientID = @id AND
                                     Status = @status AND MainTable = @bookingtype
                                     ORDER BY Bookings.DateAdded DESC";
                 }
@@ -190,13 +189,12 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"UPDATE Clients SET ContactFirstName = @fn,
-                        ContactLastName = @ln, Address = @addr,
+                        ContactLastName = @ln,
                         ContactNo = @contact, EmailAddress = @email
                         WHERE ClientID = @id";
             cmd.Parameters.AddWithValue("@id", Request.QueryString["ID"]);
             cmd.Parameters.AddWithValue("@fn", txtFN.Text);
             cmd.Parameters.AddWithValue("@ln", txtLN.Text);
-            cmd.Parameters.AddWithValue("@addr", txtAddr.Text);
             cmd.Parameters.AddWithValue("@contact", txtContactNo.Text);
             cmd.Parameters.AddWithValue("@email", txtEmail.Text);
             cmd.ExecuteNonQuery();

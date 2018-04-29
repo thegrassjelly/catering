@@ -30,7 +30,11 @@ public partial class Admin_Cheques_View : System.Web.UI.Page
                                 CheckNo, CheckAmount, CheckDate
                                 FROM Cheques
                                 INNER JOIN Accounts ON Cheques.AccountID = Accounts.AccountID
-                                WHERE CheckDate BETWEEN @datea AND @dateb";
+                                WHERE 
+                                (PayableTo LIKE @keyword OR
+                                CheckNo LIKE @keyword) AND
+                                CheckDate BETWEEN @datea AND @dateb";
+            cmd.Parameters.AddWithValue("@keyword", "%" + txtSearch.Text + "%");
             cmd.Parameters.AddWithValue("@datea", txtDateA.Text);
             cmd.Parameters.AddWithValue("@dateb", txtDateB.Text);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -52,7 +56,11 @@ public partial class Admin_Cheques_View : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"SELECT SUM(CheckAmount) AS Total FROM Cheques
-                                WHERE CheckDate Between @datea AND @dateb";
+                                WHERE 
+                                (PayableTo LIKE @keyword OR
+                                CheckNo LIKE @keyword) AND
+                                CheckDate BETWEEN @datea AND @dateb";
+            cmd.Parameters.AddWithValue("@keyword", "%" + txtSearch.Text + "%");
             cmd.Parameters.AddWithValue("@datea", txtDateA.Text);
             cmd.Parameters.AddWithValue("@dateb", txtDateB.Text);
             using (var dr = cmd.ExecuteReader())
@@ -90,6 +98,16 @@ public partial class Admin_Cheques_View : System.Web.UI.Page
     }
 
     protected void txtDateB_OnTextChanged(object sender, EventArgs e)
+    {
+        GetCheques();
+    }
+
+    protected void txtSearch_TextChanged(object sender, EventArgs e)
+    {
+        GetCheques();
+    }
+
+    protected void btnSearch_Click(object sender, EventArgs e)
     {
         GetCheques();
     }

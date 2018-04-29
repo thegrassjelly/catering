@@ -104,6 +104,13 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="javascript:;"><i class="fa fa-id-card fa-lg"></i><span>Payments</span></a>
+                    <ul class="acc-menu">
+                        <%--                        <li><a href="<%= Page.ResolveUrl("~/Admin/Payment/Add.aspx") %>"><i class="fa fa-plus"></i>Add Payment</a></li>--%>
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Payments/View.aspx") %>"><i class="fa fa-list"></i>View Payment</a></li>
+                    </ul>
+                </li>
+                <li>
                     <a href="javascript:;"><i class="fa fa-users fa-lg"></i><span>Users</span></a>
                     <ul class="acc-menu">
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Users/Add.aspx") %>"><i class="fa fa-plus"></i>Add Users</a></li>
@@ -115,9 +122,20 @@
                     <ul class="acc-menu">
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Suppliers/Add.aspx") %>"><i class="fa fa-plus"></i>Add Supplier</a></li>
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Suppliers/View.aspx") %>"><i class="fa fa-list"></i>View Suppliers</a></li>
+                        <li class="divider"></li>
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Suppliers/AddInvoice.aspx") %>"><i class="fa fa-plus"></i>Add Invoice</a></li>
+                        <li class="divider"></li>
+<%--                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/Add.aspx") %>"><i class="fa fa-plus"></i>Add Cheque</a></li>--%>
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/View.aspx") %>"><i class="fa fa-list"></i>View Cheques</a></li>
                     </ul>
                 </li>
-
+                <li>
+                    <a href="javascript:;"><i class="fa fa-dollar fa-lg"></i><span>Accounts</span></a>
+                    <ul class="acc-menu">
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/AddAccount.aspx") %>"><i class="fa fa-plus"></i>Add Account</a></li>
+                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/ViewAccounts.aspx") %>"><i class="fa fa-list"></i>View Accounts</a></li>
+                    </ul>
+                </li>
                 <li>
                     <a href="javascript:;"><i class="fa fa-boxes fa-lg"></i><span>Inventory</span></a>
                     <ul class="acc-menu">
@@ -128,23 +146,6 @@
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Inventory/View.aspx") %>"><i class="fa fa-list"></i>View Stocks</a></li>
                         <li class="divider"></li>
                         <li><a href="<%= Page.ResolveUrl("~/Admin/Inventory/UpdateInventory.aspx") %>"><i class="fa fa-edit"></i>Update Stocks</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:;"><i class="fa fa-id-card fa-lg"></i><span>Payments</span></a>
-                    <ul class="acc-menu">
-                        <%--                        <li><a href="<%= Page.ResolveUrl("~/Admin/Payment/Add.aspx") %>"><i class="fa fa-plus"></i>Add Payment</a></li>--%>
-                        <li><a href="<%= Page.ResolveUrl("~/Admin/Payments/View.aspx") %>"><i class="fa fa-list"></i>View Payment</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:;"><i class="fa fa-dollar fa-lg"></i><span>Cheques</span></a>
-                    <ul class="acc-menu">
-                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/AddAccount.aspx") %>"><i class="fa fa-plus"></i>Add Account</a></li>
-                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/ViewAccounts.aspx") %>"><i class="fa fa-list"></i>View Accounts</a></li>
-                        <li class="divider"></li>
-                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/Add.aspx") %>"><i class="fa fa-plus"></i>Add Cheque</a></li>
-                        <li><a href="<%= Page.ResolveUrl("~/Admin/Cheques/View.aspx") %>"><i class="fa fa-list"></i>View Cheques</a></li>
                     </ul>
                 </li>
                 <li>
