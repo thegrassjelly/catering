@@ -111,4 +111,9 @@ public partial class Admin_Cheques_View : System.Web.UI.Page
     {
         GetCheques();
     }
+
+    protected void btnReport_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SupplierReports.aspx?datea=" + txtDateA.Text + "&&" + "dateb=" + txtDateB.Text);
+    }
 }

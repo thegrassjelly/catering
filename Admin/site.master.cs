@@ -12,6 +12,21 @@ public partial class Admin_site : System.Web.UI.MasterPage
     {
         Helper.ValidateAdmin();
         GetUserInfo();
+        UserRestrict();
+    }
+
+    private void UserRestrict()
+    {
+        if (Session["typeid"].ToString() != "1")
+        {
+            navUsers.Visible = false;
+            navAddInvoice.Visible = false;
+            navInvoiceDivider.Visible = false;
+            navCheques.Visible = false;
+            navAccnts.Visible = false;
+            navReports.Visible = false;
+            navLogs.Visible = false;
+        }
     }
 
     private void GetUserInfo()

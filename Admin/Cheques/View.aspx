@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/site.master" AutoEventWireup="true" CodeFile="View.aspx.cs" Inherits="Admin_Cheques_View" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-    <i class="fa fa-list"></i> Cheques List
+    <i class="fa fa-list"></i> Supplier Payments
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" Runat="Server">
     <form class="form-horizontal" runat="server">
@@ -20,7 +20,11 @@
                                     <asp:TextBox ID="txtDateB" class="form-control" TextMode="Date"
                                                  AutoPostback="True" OnTextChanged="txtDateB_OnTextChanged" runat="server" />
                                 </div>
-                                <div class="col-lg-8">
+                                <div class="col-lg-1">
+                                            <asp:Button ID="btnReport" runat="server" Visible="true" class="btn btn-primary" Text="Print Report"
+                                                OnClick="btnReport_Click" />
+                                </div>
+                                <div class="col-lg-7">
                                     <div class="input-group">
                                         <asp:TextBox ID="txtSearch" runat="server" class="form-control autosuggest"
                                             placeholder="Keyword..." OnTextChanged="txtSearch_TextChanged" AutoPostBack="true" />
@@ -75,7 +79,7 @@
                         <div class="panel-footer">
                             <div class="col-lg-3 pull-right">
                                 <div class="form-group">
-                                    <label class="control-label col-lg-5">Total Cheque Amount</label>
+                                    <label class="control-label col-lg-5">Total Amount</label>
                                     <div class="col-lg-7">
                                         <div class="input-group">
                                             <span class="input-group-addon">₱</span>
