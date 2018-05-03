@@ -338,8 +338,10 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
             cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
             cmd.ExecuteNonQuery();
         }
-
+         
         GetMenu();
+
+        txtMenuName.Text = string.Empty;
     }
 
     protected void lvLinen_OnPagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
@@ -408,12 +410,13 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"INSERT INTO Bookings
-                                    (EventDateTime, IngressTime, EatingTime, EventAddress,
+                                    (AccountExec, EventDateTime, IngressTime, EatingTime, EventAddress,
                                     Theme, AdultGuest, KidGuest, ClientID, Remarks, UserID, DateAdded)
                                     VALUES
-                                    (@edate, @itime, @eattime, @eaddr, @theme, @aguest, @kguest,
+                                    (@aexec, @edate, @itime, @eattime, @eaddr, @theme, @aguest, @kguest,
                                     @cid, @rmrks, @uid, @dadded); 
                                     SELECT TOP 1 BookingID FROM Bookings WHERE UserID = @uid ORDER BY BookingID DESC";
+            cmd.Parameters.AddWithValue("@aexec", txtAE.Text);
             cmd.Parameters.AddWithValue("@edate", Convert.ToDateTime(txtEventDT.Text));
 
             cmd.Parameters.AddWithValue("@itime",
@@ -662,26 +665,33 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
 
     private void ComputeTotal()
     {
-        decimal bcharges,
-            mfee,
+        decimal bcharges, adultpax, kidpax,
+            mfee, totaladlt, totalkds,
             ocharges,
             total;
 
         decimal vat = (decimal.Parse(Helper.vat) / 100) + 1;
 
         decimal.TryParse(txtBasicFee.Text, out bcharges);
+        decimal.TryParse(txtAdultPax.Text, out adultpax);
+        decimal.TryParse(txtKidPax.Text, out kidpax);
         decimal.TryParse(txtMiscFee.Text, out mfee);
         decimal.TryParse(txtOtherFee.Text, out ocharges);
 
+        totaladlt = bcharges * adultpax;
+        totalkds = bcharges * kidpax;
+
+        txtTotalAdlt.Text = totaladlt.ToString("##.00");
+        txtTotalKds.Text = totalkds.ToString("##.00");
 
         if (ddlVat.SelectedValue == "Yes")
         {
 
-            total = (bcharges + mfee + ocharges) * vat;
+            total = ((totaladlt + totalkds) + mfee + ocharges) * vat;
         }
         else
         {
-            total = bcharges + mfee + ocharges;
+            total = (totaladlt + totalkds) + mfee + ocharges;
         }
 
         txtTotal.Text = total.ToString("##.00");

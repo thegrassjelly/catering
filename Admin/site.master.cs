@@ -23,7 +23,6 @@ public partial class Admin_site : System.Web.UI.MasterPage
             navAddInvoice.Visible = false;
             navInvoiceDivider.Visible = false;
             navCheques.Visible = false;
-            navAccnts.Visible = false;
             navReports.Visible = false;
             navLogs.Visible = false;
         }

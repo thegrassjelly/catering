@@ -20,7 +20,7 @@
                                             <asp:ListItem Text="10 Seater Round" Value="10 Seater Round" />
                                             <asp:ListItem Text="Cocktail Table" Value="Cocktail Table" />
                                             <asp:ListItem Text="Party Tray" Value="Party Tray" />
-                                            <asp:ListItem Text="Buffet" Value="Buffet" />
+                                            <asp:ListItem Text="Buffet Only" Value="Buffet Only" />
                                         </asp:DropDownList>
                                     </div>
                                 </div>
@@ -50,6 +50,7 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <th>Client Name</th>
+                                    <th>Account Executive</th>
                                     <th>Event Location</th>
                                     <th>Booking Type</th>
                                     <th>Event Date & Time</th>
@@ -65,6 +66,7 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td><%# Eval("ContactFirstName") %> <%# Eval("ContactLastName") %> </td>
+                                                <td><%# Eval("AccountExec") %></td>
                                                 <td><%# Eval("EventAddress") %></td>
                                                 <td><%# Eval("MainTable") %></td>
                                                 <td><%# Eval("EventDateTime", "{0: dddd, MMMM d, yyyy hh:mm tt}") %></td>

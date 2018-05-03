@@ -5,6 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" Runat="Server">
     <form class="form-horizontal" runat="server">
+        <asp:ScriptManager runat="server" />
         <div class="col-lg-12">
             <div class="panel panel-midnightblue">
                 <div class="panel-heading">
@@ -58,6 +59,8 @@
                     </div>
                 </div>
             </div>
+            <asp:UpdatePanel runat="server">
+                <ContentTemplate>
             <div class="panel panel-midnightblue">
                 <div class="panel-heading">
                     Issued Cheques
@@ -72,11 +75,22 @@
                             <asp:TextBox ID="txtDateB" class="form-control" TextMode="Date"
                                 AutoPostBack="True" OnTextChanged="txtDateB_TextChanged" runat="server" />
                         </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <asp:TextBox ID="txtSearchCheque" runat="server" class="form-control autosuggest"
+                                    placeholder="Keyword..." OnTextChanged="txtSearchCheque_TextChanged" AutoPostBack="true" />
+                                <span class="input-group-btn">
+                                    <asp:LinkButton ID="btnSearchCheque" runat="server" class="btn btn-info"
+                                        OnClick="btnSearchCheque_Click">
+                                      <i class="fa fa-search"></i>
+                                    </asp:LinkButton>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <table class="table table-striped table-hover">
                         <thead>
-                            <th>Account Name</th>
-                            <th>Account #</th>
+                            <th>Bank</th>
                             <th>Check #</th>
                             <th>Amount</th>
                             <th>Check Date</th>
@@ -88,8 +102,7 @@
                                 OnDataBound="lvCheques_DataBound">
                                 <ItemTemplate>
                                     <tr>
-                                        <td><%# Eval("AccountName") %></td>
-                                        <td><%# Eval("AccountNo") %></td>
+                                        <td><%# Eval("Bank") %></td>
                                         <td><%# Eval("CheckNo") %></td>
                                         <td>₱ <%# Eval("CheckAmount", "{0: #,###.00}") %></td>
                                         <td><%# Eval("CheckDate", "{0: dddd, MMMM d, yyyy}") %></td>
@@ -150,6 +163,18 @@
                             <asp:TextBox ID="txtDateD" class="form-control" TextMode="Date"
                                 AutoPostBack="True" OnTextChanged="txtDateD_TextChanged" runat="server" />
                         </div>
+                        <div class="col-lg-8">
+                            <div class="input-group">
+                                <asp:TextBox ID="txtSearchInvoice" runat="server" class="form-control autosuggest"
+                                    placeholder="Keyword..." OnTextChanged="txtSearchInvoice_TextChanged" AutoPostBack="true" />
+                                <span class="input-group-btn">
+                                    <asp:LinkButton ID="btnSearchInvoice" runat="server" class="btn btn-info"
+                                        OnClick="btnSearchInvoice_Click">
+                                      <i class="fa fa-search"></i>
+                                    </asp:LinkButton>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <table class="table table-striped table-hover">
                         <thead>
@@ -204,6 +229,8 @@
                                             </center>
                 </div>
             </div>
+                            </ContentTemplate>
+            </asp:UpdatePanel>
         </div>
     </form>
 </asp:Content>

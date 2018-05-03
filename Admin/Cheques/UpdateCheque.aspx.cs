@@ -20,32 +20,12 @@ public partial class Admin_Cheques_UpdateCheque : System.Web.UI.Page
         {
             if (!IsPostBack)
             {
-                GetAccounts();
-                GetChequeDetails(chequeid);
-                GetAccountDetails();
+                GetChequeDetails(chequeid);;
                 GetInvoice();
             }
         }
     }
 
-    private void GetAccounts()
-    {
-        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
-        using (SqlCommand cmd = new SqlCommand())
-        {
-            con.Open();
-            cmd.Connection = con;
-            cmd.CommandText = @"SELECT AccountID, AccountName
-                              FROM Accounts WHERE Status = 'Active'";
-            using (SqlDataReader dr = cmd.ExecuteReader())
-            {
-                ddlAccName.DataSource = dr;
-                ddlAccName.DataTextField = "AccountName";
-                ddlAccName.DataValueField = "AccountID";
-                ddlAccName.DataBind();
-            }
-        }
-    }
 
     private void GetChequeDetails(int chequeid)
     {
@@ -54,7 +34,7 @@ public partial class Admin_Cheques_UpdateCheque : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"SELECT AccountID,
+            cmd.CommandText = @"SELECT Bank,
                 CheckNo, PayableTo, CheckAmount,
                 CheckDate FROM Cheques WHERE ChequeID = @id";
             cmd.Parameters.AddWithValue("@id", chequeid);
@@ -62,7 +42,7 @@ public partial class Admin_Cheques_UpdateCheque : System.Web.UI.Page
             {
                 if (!dr.HasRows) return;
                 if (!dr.Read()) return;
-                ddlAccName.SelectedValue = dr["AccountID"].ToString();
+                txtBank.Text = dr["Bank"].ToString();
                 txtCheckNo.Text = dr["CheckNo"].ToString();
                 txtPayable.Text = dr["PayableTo"].ToString();
                 txtCheckAmnt.Text = dr["CheckAmount"].ToString();
@@ -84,12 +64,12 @@ public partial class Admin_Cheques_UpdateCheque : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"UPDATE Cheques SET AccountID = @accid, 
+            cmd.CommandText = @"UPDATE Cheques SET Bank = @bank, 
                                 CheckNo = @cno,
                                 PayableTo = @payto, CheckAmount = @camnt, CheckDate = @cdate
                                 WHERE ChequeID = @id";
             cmd.Parameters.AddWithValue("@id", Request.QueryString["ID"]);
-            cmd.Parameters.AddWithValue("@accid", ddlAccName.SelectedValue);
+            cmd.Parameters.AddWithValue("@bank", txtBank.Text);
             cmd.Parameters.AddWithValue("@cno", txtCheckNo.Text);
             cmd.Parameters.AddWithValue("@payto", txtPayable.Text);
             cmd.Parameters.AddWithValue("@camnt", txtCheckAmnt.Text);
@@ -98,32 +78,6 @@ public partial class Admin_Cheques_UpdateCheque : System.Web.UI.Page
         }
 
         Response.Redirect("View.aspx");
-    }
-
-    protected void ddlAccName_OnSelectedIndexChanged(object sender, EventArgs e)
-    {
-        GetAccountDetails();
-    }
-
-    private void GetAccountDetails()
-    {
-        using (var con = new SqlConnection(Helper.GetCon()))
-        using (var cmd = new SqlCommand())
-        {
-            con.Open();
-            cmd.Connection = con;
-            cmd.CommandText = @"SELECT AccountNo,
-                BankName, Branch FROM Accounts WHERE AccountID = @id";
-            cmd.Parameters.AddWithValue("@id", ddlAccName.SelectedValue);
-            using (var dr = cmd.ExecuteReader())
-            {
-                if (!dr.HasRows) return;
-                if (!dr.Read()) return;
-                txtAccNo.Text = dr["AccountNo"].ToString();
-                txtBank.Text = dr["BankName"].ToString();
-                txtBranch.Text = dr["Branch"].ToString();
-            }
-        }
     }
 
     private void GetInvoice()

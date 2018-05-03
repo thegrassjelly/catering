@@ -67,7 +67,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
             {
                 if (ddlPaymentStatus.SelectedValue == "All Status")
                 {
-                    cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
+                    cmd.CommandText = @"SELECT AccountExec, ContactFirstName, ContactLastName,
                                     MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
@@ -81,7 +81,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                 }
                 else
                 {
-                    cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
+                    cmd.CommandText = @"SELECT AccountExec, ContactFirstName, ContactLastName,
                                     MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
@@ -100,7 +100,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
             {
                 if (ddlPaymentStatus.SelectedValue == "All Status")
                 {
-                    cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
+                    cmd.CommandText = @"SELECT AccountExec, ContactFirstName, ContactLastName,
                                     MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings
@@ -115,7 +115,7 @@ public partial class Admin_Booking_ClientBookings : System.Web.UI.Page
                 }
                 else
                 {
-                    cmd.CommandText = @"SELECT ContactFirstName, ContactLastName,
+                    cmd.CommandText = @"SELECT AccountExec, ContactFirstName, ContactLastName,
                                     MainTable, EventAddress, EventDateTime, Status,
                                     Bookings.DateAdded, Bookings.BookingID
                                     FROM Bookings

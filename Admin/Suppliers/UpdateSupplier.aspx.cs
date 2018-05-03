@@ -44,11 +44,14 @@ public partial class Admin_Suppliers_UpdateSupplier : System.Web.UI.Page
             cmd.CommandText = @"SELECT InvoiceID, InvoiceNumber, Description,
                                 InvoiceDate, Amount, Status, DateAdded
                                 FROM Invoice 
-                                WHERE SupplierID = @id AND
+                                WHERE 
+                                (InvoiceNumber LIKE @keyword) 
+                                AND SupplierID = @id AND
                                 InvoiceDate BETWEEN @datea AND @dateb";
+            cmd.Parameters.AddWithValue("@keyword", "%" + txtSearchInvoice.Text + "%");
             cmd.Parameters.AddWithValue("@id", Request.QueryString["ID"]);
-            cmd.Parameters.AddWithValue("@datea", txtDateA.Text);
-            cmd.Parameters.AddWithValue("@dateb", txtDateB.Text);
+            cmd.Parameters.AddWithValue("@datea", txtDateC.Text);
+            cmd.Parameters.AddWithValue("@dateb", txtDateD.Text);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             con.Close();
@@ -65,12 +68,16 @@ public partial class Admin_Suppliers_UpdateSupplier : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"SELECT ChequeID, AccountName, AccountNo, PayableTo,
+            cmd.CommandText = @"SELECT ChequeID, Bank, PayableTo,
                                 CheckNo, CheckAmount, CheckDate
                                 FROM Cheques
-                                INNER JOIN Accounts ON Cheques.AccountID = Accounts.AccountID
-                                WHERE PayableTo = @supname AND
+                                WHERE 
+                                (Bank LIKE @keyword OR
+                                PayableTo LIKE @keyword OR
+                                CheckNo LIKE @keyword) 
+                                AND PayableTo = @supname AND
                                 CheckDate BETWEEN @datea AND @dateb";
+            cmd.Parameters.AddWithValue("@keyword", "%" + txtSearchCheque.Text + "%");
             cmd.Parameters.AddWithValue("@supname", txtSupplierName.Text);
             cmd.Parameters.AddWithValue("@datea", txtDateA.Text);
             cmd.Parameters.AddWithValue("@dateb", txtDateB.Text);
@@ -93,8 +100,13 @@ public partial class Admin_Suppliers_UpdateSupplier : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"SELECT SUM(CheckAmount) AS Total FROM Cheques
-                                WHERE PayableTo = @supname AND
+                                WHERE 
+                                (Bank LIKE @keyword OR
+                                PayableTo LIKE @keyword OR
+                                CheckNo LIKE @keyword) 
+                                AND PayableTo = @supname AND
                                 CheckDate BETWEEN @datea AND @dateb";
+            cmd.Parameters.AddWithValue("@keyword", "%" + txtSearchCheque.Text + "%");
             cmd.Parameters.AddWithValue("@supname", txtSupplierName.Text);
             cmd.Parameters.AddWithValue("@datea", txtDateA.Text);
             cmd.Parameters.AddWithValue("@dateb", txtDateB.Text);
@@ -209,5 +221,25 @@ public partial class Admin_Suppliers_UpdateSupplier : System.Web.UI.Page
     protected void txtDateD_TextChanged(object sender, EventArgs e)
     {
         GetInvoice();
+    }
+
+    protected void txtSearchInvoice_TextChanged(object sender, EventArgs e)
+    {
+        GetInvoice();
+    }
+
+    protected void btnSearchInvoice_Click(object sender, EventArgs e)
+    {
+        GetInvoice();
+    }
+
+    protected void txtSearchCheque_TextChanged(object sender, EventArgs e)
+    {
+        GetCheque();
+    }
+
+    protected void btnSearchCheque_Click(object sender, EventArgs e)
+    {
+        GetCheque();
     }
 }

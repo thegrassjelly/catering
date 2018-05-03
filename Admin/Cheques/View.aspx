@@ -40,8 +40,7 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <th>Supplier Name</th>
-                                    <th>Account Name</th>
-                                    <th>Account #</th>
+                                    <th>Bank</th>
                                     <th>Check #</th>
                                     <th>Amount</th>
                                     <th>Check Date</th>
@@ -54,8 +53,7 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td><%# Eval("PayableTo") %></td>
-                                                <td><%# Eval("AccountName") %></td>
-                                                <td><%# Eval("AccountNo") %></td>
+                                                <td><%# Eval("Bank") %></td>
                                                 <td><%# Eval("CheckNo") %></td>
                                                 <td>₱ <%# Eval("CheckAmount", "{0: #,###.00}") %></td>
                                                 <td><%# Eval("CheckDate", "{0: dddd, MMMM d, yyyy}") %></td>

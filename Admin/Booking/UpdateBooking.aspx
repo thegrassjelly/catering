@@ -190,6 +190,13 @@
                         <div class="panel-body">
                             <div class="col-lg-4">
                                 <div class="form-group">
+                                    <label class="control-label col-lg-4">Account Executive</label>
+                                    <div class="col-lg-7">
+                                        <asp:TextBox ID="txtAE" class="form-control"
+                                            runat="server" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="control-label col-lg-4">Event Date & Time</label>
                                     <div class="col-lg-8">
                                         <asp:TextBox ID="txtEventDT" class="form-control"
@@ -250,13 +257,13 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label class="control-label col-lg-4">Main Table (with stand)</label>
+                                    <label class="control-label col-lg-4">Complete Setup</label>
                                     <div class="col-lg-7">
                                         <asp:DropDownList ID="ddlMainTable" class="form-control" runat="server">
                                             <asp:ListItem>10 Seater Round</asp:ListItem>
                                             <asp:ListItem>Cocktail Table</asp:ListItem>
                                             <asp:ListItem>Party Tray</asp:ListItem>
-                                            <asp:ListItem>Buffet</asp:ListItem>
+                                            <asp:ListItem>Buffet Only</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                 </div>
@@ -268,7 +275,7 @@
                                 </div>
                                 <div id="pnlHides2" runat="server">
                                     <div class="form-group">
-                                        <label class="control-label col-lg-4">8 Seater Table</label>
+                                        <label class="control-label col-lg-4">10 Seater Table</label>
                                         <div class="col-lg-7">
                                             <asp:TextBox ID="txtEightSeater" class="form-control" runat="server" />
                                         </div>
@@ -331,7 +338,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-lg-4">8 Seater Round</label>
+                                    <label class="control-label col-lg-4">10 Seater Round</label>
                                     <div class="col-lg-7">
                                         <asp:TextBox ID="txtEightSeaterRound" class="form-control" runat="server" />
                                     </div>
@@ -548,6 +555,26 @@
                                                     Text="0" TextMode="number"
                                                     AutoPostBack="true"
                                                     OnTextChanged="txtBasicFee_TextChanged" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Total for Adult</label>
+                                        <div class="col-lg-8">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">₱</span>
+                                                <asp:TextBox ID="txtTotalAdlt" class="form-control" runat="server"
+                                                    Text="0" TextMode="number" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Total for Kids</label>
+                                        <div class="col-lg-8">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">₱</span>
+                                                <asp:TextBox ID="txtTotalKds" class="form-control" runat="server"
+                                                    Text="0" TextMode="number" disabled />
                                             </div>
                                         </div>
                                     </div>

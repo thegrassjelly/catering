@@ -255,7 +255,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"SELECT BookingDetailsID, EventDateTime, IngressTime, EatingTime,
+            cmd.CommandText = @"SELECT BookingDetailsID, AccountExec, EventDateTime, IngressTime, EatingTime,
                                 EventAddress, Theme, AdultGuest, KidGuest, Remarks,
                                 MainTable, MainTableQty, EightSeater, MonoBlock, KiddieTables,
                                 BuffetTables, Utensils, RollTop, ChafingDish, Flowers,
@@ -275,6 +275,7 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
                 DateTime it = Convert.ToDateTime(dr["EventDateTime"]);
                 DateTime et = Convert.ToDateTime(dr["EventDateTime"]);
 
+                txtAE.Text = dr["AccountExec"].ToString();
                 txtEventDT.Text = edt.ToString("yyyy-MM-ddTHH:mm");
                 txtIngressTime.Text = it.ToString("HH:mm");
                 txtEatingTime.Text = et.ToString("HH:mm");
@@ -361,10 +362,11 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
             con.Open();
             cmd.Connection = con;
             cmd.CommandText = @"UPDATE Bookings SET
-                                EventDateTime = @edt, IngressTime = @itime, EatingTime = @eattime,
+                                AccountExec = @aexec, EventDateTime = @edt, IngressTime = @itime, EatingTime = @eattime,
                                 EventAddress = @eaddr, Theme = @theme, AdultGuest = @aguest, KidGuest = @kguest,
                                 Remarks = @rmks WHERE BookingID = @id";
             cmd.Parameters.AddWithValue("@id", Request.QueryString["ID"]);
+            cmd.Parameters.AddWithValue("@aexec", txtAE.Text);
             cmd.Parameters.AddWithValue("@edt", Convert.ToDateTime(txtEventDT.Text));
 
             cmd.Parameters.AddWithValue("@itime",
@@ -692,26 +694,33 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
 
     private void ComputeTotal()
     {
-        decimal bcharges,
-            mfee,
+        decimal bcharges, adultpax, kidpax,
+            mfee, totaladlt, totalkds,
             ocharges,
             total;
 
         decimal vat = (decimal.Parse(Helper.vat) / 100) + 1;
 
         decimal.TryParse(txtBasicFee.Text, out bcharges);
+        decimal.TryParse(txtAdultPax.Text, out adultpax);
+        decimal.TryParse(txtKidPax.Text, out kidpax);
         decimal.TryParse(txtMiscFee.Text, out mfee);
         decimal.TryParse(txtOtherFee.Text, out ocharges);
 
+        totaladlt = bcharges * adultpax;
+        totalkds = bcharges * kidpax;
+
+        txtTotalAdlt.Text = totaladlt.ToString("##.00");
+        txtTotalKds.Text = totalkds.ToString("##.00");
 
         if (ddlVat.SelectedValue == "Yes")
         {
 
-            total = (bcharges + mfee + ocharges) * vat;
+            total = ((totaladlt + totalkds) + mfee + ocharges) * vat;
         }
         else
         {
-            total = bcharges + mfee + ocharges;
+            total = (totaladlt + totalkds) + mfee + ocharges;
         }
 
         txtTotal.Text = total.ToString("##.00");

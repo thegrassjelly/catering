@@ -26,10 +26,9 @@ public partial class Admin_Cheques_View : System.Web.UI.Page
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"SELECT ChequeID, AccountName, AccountNo, PayableTo,
+            cmd.CommandText = @"SELECT ChequeID, Bank, PayableTo,
                                 CheckNo, CheckAmount, CheckDate
                                 FROM Cheques
-                                INNER JOIN Accounts ON Cheques.AccountID = Accounts.AccountID
                                 WHERE 
                                 (PayableTo LIKE @keyword OR
                                 CheckNo LIKE @keyword) AND

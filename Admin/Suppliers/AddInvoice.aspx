@@ -236,32 +236,11 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="control-label col-lg-3">Account Name</label>
-                                    <div class="col-lg-6">
-                                        <asp:DropDownList ID="ddlAccName" class="form-control" runat="server"
-                                            AutoPostBack="True" OnSelectedIndexChanged="ddlAccName_SelectedIndexChanged" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-lg-3">Account Number</label>
-                                    <div class="col-lg-6">
-                                        <asp:TextBox ID="txtAccNo" class="form-control" runat="server" disabled />
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="control-label col-lg-3">Bank</label>
                                     <div class="col-lg-6">
-                                        <asp:TextBox ID="txtBank" class="form-control" runat="server" disabled />
+                                        <asp:TextBox ID="txtBank" class="form-control" runat="server" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-lg-3">Branch</label>
-                                    <div class="col-lg-6">
-                                        <asp:TextBox ID="txtBranch" class="form-control" runat="server" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="control-label col-lg-3">Check Number</label>
                                     <div class="col-lg-6">
@@ -275,6 +254,8 @@
                                         <asp:TextBox ID="txtPayable" class="form-control" runat="server" />
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="control-label col-lg-3">Check Amount</label>
                                     <div class="col-lg-6">
