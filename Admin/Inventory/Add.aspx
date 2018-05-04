@@ -23,7 +23,7 @@
                             <label class="control-label col-lg-3">Stock Name</label>
                             <div class="col-lg-6">
                                 <asp:TextBox ID="txtStockName" class="form-control"
-                                                  runat="server" />
+                                                  runat="server" required />
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                             <div class="col-lg-6">
                                 <asp:TextBox ID="txtQty" class="form-control"
                                              Text="0"
-                                             TextMode="number" runat="server" />
+                                             TextMode="number" runat="server" required />
                             </div>
                         </div>
                     </div>
