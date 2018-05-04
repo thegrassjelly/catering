@@ -39,6 +39,7 @@
                             <label class="control-label col-lg-3">Initial Quantity</label>
                             <div class="col-lg-6">
                                 <asp:TextBox ID="txtQty" class="form-control"
+                                             Text="0"
                                              TextMode="number" runat="server" />
                             </div>
                         </div>
