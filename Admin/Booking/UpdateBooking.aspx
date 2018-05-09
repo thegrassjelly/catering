@@ -104,6 +104,11 @@
                             Menu
                         </div>
                         <div class="panel-body">
+                            <div id="menuError" runat="server" visible="false">
+                                <div class="alert alert-danger">
+                                    <b>Enter a menu item</b>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="control-label col-lg-3">Menu for</label>
                                 <div class="col-lg-5">

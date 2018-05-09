@@ -87,34 +87,77 @@ public partial class Admin_Suppliers_AddInvoice : System.Web.UI.Page
 
     protected void btnAddInvoice_Click(object sender, EventArgs e)
     {
+        if (txtInvoiceNo.Text != "")
+        {
+            invoiceNoError.Visible = false;
+
+            if (!isExist())
+            {
+                invoiceExist.Visible = false;
+
+                using (var con = new SqlConnection(Helper.GetCon()))
+                using (var cmd = new SqlCommand())
+                {
+                    con.Open();
+                    cmd.Connection = con;
+                    cmd.CommandText = @"INSERT INTO Invoice
+                                (InvoiceNumber, Description, InvoiceDate, Amount, 
+                                SupplierID, CheckID, Status, UserID, DateAdded)
+                                VALUES
+                                (@inum, @desc, @idate, @amnt, @supid, @cid, @status, @uid, @dadded)";
+                    cmd.Parameters.AddWithValue("@inum", txtInvoiceNo.Text);
+                    cmd.Parameters.AddWithValue("@desc", txtDesc.Text);
+                    cmd.Parameters.AddWithValue("@idate", txtInvoiceDate.Text);
+                    cmd.Parameters.AddWithValue("@amnt", txtInvoiceAmnt.Text);
+                    cmd.Parameters.AddWithValue("@supid", hfName.Value);
+                    cmd.Parameters.AddWithValue("@cid", -1);
+                    cmd.Parameters.AddWithValue("@status", ddlStatus.SelectedValue);
+                    cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
+                    cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+                    cmd.ExecuteNonQuery();
+                }
+
+                txtInvoiceNo.Text = string.Empty;
+                txtDesc.Text = string.Empty;
+                txtInvoiceDate.Text = string.Empty;
+                txtInvoiceAmnt.Text = string.Empty;
+
+                GetInvoice();
+            }
+            else
+            {
+                invoiceExist.Visible = true;
+            }
+        }
+        else
+        {
+            invoiceNoError.Visible = true;
+        }
+    }
+
+    bool isExist()
+    {
+        bool isExist;
+
         using (var con = new SqlConnection(Helper.GetCon()))
         using (var cmd = new SqlCommand())
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"INSERT INTO Invoice
-                                (InvoiceNumber, Description, InvoiceDate, Amount, 
-                                SupplierID, CheckID, Status, UserID, DateAdded)
-                                VALUES
-                                (@inum, @desc, @idate, @amnt, @supid, @cid, @status, @uid, @dadded)";
-            cmd.Parameters.AddWithValue("@inum", txtInvoiceNo.Text);
-            cmd.Parameters.AddWithValue("@desc", txtDesc.Text);
-            cmd.Parameters.AddWithValue("@idate", txtInvoiceDate.Text);
-            cmd.Parameters.AddWithValue("@amnt", txtInvoiceAmnt.Text);
-            cmd.Parameters.AddWithValue("@supid", hfName.Value);
-            cmd.Parameters.AddWithValue("@cid", -1);
-            cmd.Parameters.AddWithValue("@status", ddlStatus.SelectedValue);
-            cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
-            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            cmd.ExecuteNonQuery();
+            cmd.CommandText = @"SELECT InvoiceNumber FROM Invoice
+                                WHERE InvoiceNumber = @ino AND SupplierID = @sid";
+            cmd.Parameters.AddWithValue("@sid", hfName.Value);
+            cmd.Parameters.AddWithValue("@ino", txtInvoiceNo.Text);
+            using (SqlDataReader dr = cmd.ExecuteReader())
+            {
+                dr.Read();
+                {
+                    isExist = dr.HasRows;
+                }
+            }
         }
 
-        GetInvoice();
-
-        txtInvoiceNo.Text = string.Empty;
-        txtDesc.Text = string.Empty;
-        txtInvoiceDate.Text = string.Empty;
-        txtInvoiceAmnt.Text = string.Empty;
+        return isExist;
     }
 
     private void GetInvoice()

@@ -121,6 +121,16 @@
                         </div>
                         <div class="panel-body">
                             <div class="col-lg-6">
+                                <div id="invoiceExist" runat="server" visible="false">
+                                    <div class="alert alert-danger">
+                                        <b>Invoice # already exist</b>
+                                    </div>
+                                </div>
+                                <div id="invoiceNoError" runat="server" visible="false">
+                                    <div class="alert alert-danger">
+                                        <b>Enter an Invoice #</b>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="control-label col-lg-3">Invoice #</label>
                                     <div class="col-lg-7">

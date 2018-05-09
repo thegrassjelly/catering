@@ -334,24 +334,35 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
 
     protected void btnAddMenu_OnClick(object sender, EventArgs e)
     {
-        using (var con = new SqlConnection(Helper.GetCon()))
-        using (var cmd = new SqlCommand())
+        if (txtMenuName.Text != "")
         {
-            con.Open();
-            cmd.Connection = con;
-            cmd.CommandText = @"INSERT INTO Menu
+            menuError.Visible = false;
+
+            using (var con = new SqlConnection(Helper.GetCon()))
+            using (var cmd = new SqlCommand())
+            {
+                con.Open();
+                cmd.Connection = con;
+                cmd.CommandText = @"INSERT INTO Menu
                                 (MenuName, Guest, BookingDetailsID, UserID, DateAdded)
                                 VALUES
                                 (@menuname, @guest, @bdid, @uid, @dadded)";
-            cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
-            cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
-            cmd.Parameters.AddWithValue("@bdid", _bdid);
-            cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
-            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            cmd.ExecuteNonQuery();
-        }
+                cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
+                cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
+                cmd.Parameters.AddWithValue("@bdid", _bdid);
+                cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
+                cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+                cmd.ExecuteNonQuery();
+            }
 
-        GetMenu(_bdid);
+            txtMenuName.Text = string.Empty;
+
+            GetMenu(_bdid);
+        }
+        else
+        {
+            menuError.Visible = true;
+        }
     }
 
     protected void btnUpdate_OnClick(object sender, EventArgs e)

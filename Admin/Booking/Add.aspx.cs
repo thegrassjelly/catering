@@ -204,28 +204,77 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
         pnlAddedClient.Visible = false;
     }
 
-    protected void btnAdd_OnClick(object sender, EventArgs e)
+    bool isClientExist()
     {
+        bool isExist;
+
         using (var con = new SqlConnection(Helper.GetCon()))
         using (var cmd = new SqlCommand())
         {
             con.Open();
             cmd.Connection = con;
-            cmd.CommandText = @"INSERT INTO Clients
+            cmd.CommandText = @"SELECT ClientID FROM Clients
+                                WHERE ContactFirstName = @cfn AND
+                                ContactLastName = @cln AND EmailAddress = @eadd";
+            cmd.Parameters.AddWithValue("@cfn", txtNewFN.Text);
+            cmd.Parameters.AddWithValue("@cln", txtNewLN.Text);
+            cmd.Parameters.AddWithValue("@eadd", txtNewEmail.Text);
+            using (SqlDataReader dr = cmd.ExecuteReader())
+            {
+                dr.Read();
+                {
+                    isExist = dr.HasRows;
+                }
+            }
+        }
+
+        return isExist;
+    }
+
+    protected void btnAdd_OnClick(object sender, EventArgs e)
+    {
+        if (txtNewFN.Text != "" && txtNewLN.Text != "")
+        {
+            errorClient.Visible = false;
+
+            if (!isClientExist())
+            {
+                clientExist.Visible = false;
+
+                using (var con = new SqlConnection(Helper.GetCon()))
+                using (var cmd = new SqlCommand())
+                {
+                    con.Open();
+                    cmd.Connection = con;
+                    cmd.CommandText = @"INSERT INTO Clients
                             (ContactFirstName, ContactLastName, ContactNo,
                             EmailAddress, DateAdded) VALUES
                             (@fn, @ln, @conct, @eadd, @dadded)";
-            cmd.Parameters.AddWithValue("@fn", txtNewFN.Text);
-            cmd.Parameters.AddWithValue("@ln", txtNewLN.Text);
-            cmd.Parameters.AddWithValue("@conct", txtNewMob.Text);
-            cmd.Parameters.AddWithValue("@eadd", txtNewEmail.Text);
-            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue("@fn", txtNewFN.Text);
+                    cmd.Parameters.AddWithValue("@ln", txtNewLN.Text);
+                    cmd.Parameters.AddWithValue("@conct", txtNewMob.Text);
+                    cmd.Parameters.AddWithValue("@eadd", txtNewEmail.Text);
+                    cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+                    cmd.ExecuteNonQuery();
 
-            pnlAddedClient.Visible = true;
+                    txtNewFN.Text = string.Empty;
+                    txtNewLN.Text = string.Empty;
+                    txtNewEmail.Text = string.Empty;
+                    txtNewMob.Text = string.Empty;
+                    btnAdd.Visible = false;
 
-            Helper.Log("Add Client",
-                "Added client: " + txtNewLN.Text + ", " + txtNewFN.Text, "", Session["userid"].ToString());
+                    Helper.Log("Add Client",
+                        "Added client: " + txtNewLN.Text + ", " + txtNewFN.Text, "", Session["userid"].ToString());
+                }
+            }
+            else
+            {
+                clientExist.Visible = true;
+            }
+        }
+        else
+        {
+            errorClient.Visible = true;
         }
     }
 
@@ -322,26 +371,35 @@ public partial class Admin_Booking_Add : System.Web.UI.Page
 
     protected void btnAddMenu_OnClick(object sender, EventArgs e)
     {
-        using (var con = new SqlConnection(Helper.GetCon()))
-        using (var cmd = new SqlCommand())
+        if (txtMenuName.Text != "")
         {
-            con.Open();
-            cmd.Connection = con;
-            cmd.CommandText = @"INSERT INTO Menu
+            menuError.Visible = false;
+
+            using (var con = new SqlConnection(Helper.GetCon()))
+            using (var cmd = new SqlCommand())
+            {
+                con.Open();
+                cmd.Connection = con;
+                cmd.CommandText = @"INSERT INTO Menu
                                 (MenuName, Guest, BookingDetailsID, UserID, DateAdded)
                                 VALUES
                                 (@menuname, @guest, @bdid, @uid, @dadded)";
-            cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
-            cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
-            cmd.Parameters.AddWithValue("@bdid", "-1");
-            cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
-            cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
-            cmd.ExecuteNonQuery();
-        }
-         
-        GetMenu();
+                cmd.Parameters.AddWithValue("@menuname", txtMenuName.Text);
+                cmd.Parameters.AddWithValue("@guest", ddlGuest.SelectedValue);
+                cmd.Parameters.AddWithValue("@bdid", "-1");
+                cmd.Parameters.AddWithValue("@uid", Session["userid"].ToString());
+                cmd.Parameters.AddWithValue("@dadded", Helper.PHTime());
+                cmd.ExecuteNonQuery();
+            }
 
-        txtMenuName.Text = string.Empty;
+            txtMenuName.Text = string.Empty;
+
+            GetMenu();
+        }
+        else
+        {
+            menuError.Visible = true;
+        }
     }
 
     protected void lvLinen_OnPagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
