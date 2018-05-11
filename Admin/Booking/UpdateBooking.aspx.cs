@@ -23,6 +23,8 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
             {
                 Hides(bookingID);
                 GetClientDetails(bookingID);
+                ComputeTotal();
+                ComputeBalance();
             }
         }
     }
@@ -739,10 +741,12 @@ public partial class Admin_Booking_UpdateBooking : System.Web.UI.Page
 
     private void ComputeBalance()
     {
-        decimal total, dp;
+        decimal total, dp = 0;
 
         decimal.TryParse(txtTotal.Text, out total);
         decimal.TryParse(txtDP.Text, out dp);
+
+        txtDP.Text = dp.ToString();
 
         txtBalance.Text = (total - dp).ToString("##.00");
     }
